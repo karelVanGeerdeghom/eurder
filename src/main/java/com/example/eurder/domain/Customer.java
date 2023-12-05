@@ -1,22 +1,18 @@
 package com.example.eurder.domain;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-
-import java.util.Collection;
-
-public class Customer extends User {
+public class Customer {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
     private String phoneNumber;
     private String address;
 
-    public Customer(String username, String password, Collection<? extends GrantedAuthority> authorities, String firstName, String lastName, String email, String phoneNumber, String address) {
-        super(username, password, authorities);
+    public Customer(String firstName, String lastName, String email, String password, String phoneNumber, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password = password;
         this.phoneNumber = phoneNumber;
         this.address = address;
     }

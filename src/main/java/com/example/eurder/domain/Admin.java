@@ -1,26 +1,23 @@
 package com.example.eurder.domain;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-
-import java.util.Collection;
 import java.util.UUID;
 
-public class Admin extends User {
-    private Long id;
+public class Admin {
+    private String id;
     private String email;
+    private String password;
 
-    public Admin(String username, String password, Collection<? extends GrantedAuthority> authorities, String email) {
-        super(username, password, authorities);
-        this.id = 1L;
+    public Admin(String email, String password) {
+        this.id = UUID.randomUUID().toString();
         this.email = email;
+        this.password = password;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -30,5 +27,13 @@ public class Admin extends User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
