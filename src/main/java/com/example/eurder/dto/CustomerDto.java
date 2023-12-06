@@ -1,5 +1,7 @@
 package com.example.eurder.dto;
 
+import java.util.Objects;
+
 public class CustomerDto {
     private Integer id;
     private String email;
@@ -15,6 +17,19 @@ public class CustomerDto {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.address = address;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CustomerDto that = (CustomerDto) o;
+        return Objects.equals(id, that.id) && Objects.equals(email, that.email) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(address, that.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, firstName, lastName, phoneNumber, address);
     }
 
     public Integer getId() {

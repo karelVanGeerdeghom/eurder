@@ -23,6 +23,8 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
+
+
     public Customer authenticate(String email, String password) throws UnknownCustomerEmailException, WrongPasswordException {
         return validatePassword(getByEmail(email), password);
     }
@@ -36,9 +38,11 @@ public class CustomerService {
         return customer;
     }
 
-    public Customer getByEmail(String email) {
+    private Customer getByEmail(String email) {
         return customerRepository.getByEmail(email);
     }
+
+
 
     public CustomerDto createCustomer(CreateCustomerDto createCustomerDto) {
         Customer customer = customerRepository.create(customerMapper.createCustomerDtoToCustomer(createCustomerDto));
@@ -47,7 +51,7 @@ public class CustomerService {
         return customerDto;
     }
 
-    public CustomerDto getCustomer(Integer id) {
+    public CustomerDto getById(Integer id) {
         Customer customer = customerRepository.getById(id);
         CustomerDto customerDto = customerMapper.customerToCustomerDto(customer);
 

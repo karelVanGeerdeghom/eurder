@@ -15,6 +15,8 @@ public class AdminService {
         this.adminRepository = adminRepository;
     }
 
+
+
     public Admin authenticate(String email, String password) throws UnknownAdminEmailException, WrongPasswordException {
         return validatePassword(getByEmail(email), password);
     }
@@ -28,7 +30,7 @@ public class AdminService {
         return admin;
     }
 
-    public Admin getByEmail(String email) {
+    private Admin getByEmail(String email) {
         return adminRepository.getByEmail(email);
     }
 }

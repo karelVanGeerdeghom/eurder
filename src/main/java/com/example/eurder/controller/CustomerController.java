@@ -29,7 +29,7 @@ public class CustomerController {
     public CustomerDto getCustomer(@RequestHeader String email, @RequestHeader String password, @PathVariable Integer id) {
         adminService.authenticate(email, password);
 
-        return customerService.getCustomer(id);
+        return customerService.getById(id);
     }
 
     @GetMapping
