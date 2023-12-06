@@ -1,10 +1,13 @@
 package com.example.eurder.repository;
 
 import com.example.eurder.domain.Customer;
+import com.example.eurder.exception.UnknownCustomerEmailException;
+import com.example.eurder.exception.UnknownCustomerIdException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CustomerRepositoryTest {
     private CustomerRepository customerRepository = new CustomerRepository();
@@ -24,7 +27,7 @@ class CustomerRepositoryTest {
         String phoneNumber = "phoneNumber";
         String address = "address";
 
-        Customer customer = new Customer(firstName, lastName, email, password, phoneNumber, address);
+        Customer customer = new Customer(email, password, firstName, lastName, phoneNumber, address);
 
         // WHEN
         Customer actual = customerRepository.create(customer);
@@ -32,10 +35,10 @@ class CustomerRepositoryTest {
         // THEN
         assertThat(actual).isInstanceOf(Customer.class);
         assertThat(actual.getId()).isEqualTo(1);
-        assertThat(actual.getFirstName()).isEqualTo(firstName);
-        assertThat(actual.getLastName()).isEqualTo(lastName);
         assertThat(actual.getEmail()).isEqualTo(email);
         assertThat(actual.getPassword()).isEqualTo(password);
+        assertThat(actual.getFirstName()).isEqualTo(firstName);
+        assertThat(actual.getLastName()).isEqualTo(lastName);
         assertThat(actual.getPhoneNumber()).isEqualTo(phoneNumber);
         assertThat(actual.getAddress()).isEqualTo(address);
     }
@@ -50,7 +53,7 @@ class CustomerRepositoryTest {
         String phoneNumber = "phoneNumber";
         String address = "address";
 
-        customerRepository.create(new Customer(firstName, lastName, email, password, phoneNumber, address));
+        customerRepository.create(new Customer(email, password, firstName, lastName, phoneNumber, address));
 
         // WHEN
         Customer actual = customerRepository.getById(1);
@@ -58,11 +61,47 @@ class CustomerRepositoryTest {
         // THEN
         assertThat(actual).isInstanceOf(Customer.class);
         assertThat(actual.getId()).isEqualTo(1);
-        assertThat(actual.getFirstName()).isEqualTo(firstName);
-        assertThat(actual.getLastName()).isEqualTo(lastName);
         assertThat(actual.getEmail()).isEqualTo(email);
         assertThat(actual.getPassword()).isEqualTo(password);
+        assertThat(actual.getFirstName()).isEqualTo(firstName);
+        assertThat(actual.getLastName()).isEqualTo(lastName);
         assertThat(actual.getPhoneNumber()).isEqualTo(phoneNumber);
         assertThat(actual.getAddress()).isEqualTo(address);
+    }
+
+    @Test
+    void givenExistingEmail_whenGetCustomerByEmail_thenGetCustomerWithGivenEmail() {
+        // GIVEN
+        String email = "firstName.lastName@mail.com";
+        String password = "password";
+
+        customerRepository.create(new Customer(email, password, "firstName", "lastName", "phoneNumber", "address"));
+
+        // WHEN
+        Customer actual = customerRepository.getByEmail(email);
+
+        // THEN
+        assertThat(actual).isInstanceOf(Customer.class);
+        assertThat(actual.getId()).isEqualTo(1);
+        assertThat(actual.getEmail()).isEqualTo(email);
+        assertThat(actual.getPassword()).isEqualTo(password);
+    }
+
+    @Test
+    void givenUnknownId_whenGetCustomerById_thenThrowUnknownCustomerIdException() {
+        // GIVEN
+        Integer id = 1;
+
+        // WHEN + THEN
+        assertThatThrownBy(() -> customerRepository.getById(id)).isInstanceOf(UnknownCustomerIdException.class);
+    }
+
+    @Test
+    void givenUnknownEmail_whenGetCustomerByEmail_thenThrowUnknownCustomerEmailException() {
+        // GIVEN
+        String email = "firstName.lastName@eurder.com";
+
+        // WHEN + THEN
+        assertThatThrownBy(() -> customerRepository.getByEmail(email)).isInstanceOf(UnknownCustomerEmailException.class);
     }
 }

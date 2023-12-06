@@ -14,14 +14,14 @@ class CustomerMapperTest {
     @Test
     void givenCustomer_whenMapCustomerToCustomerDto_thenGetCustomerDto() {
         // GIVEN
-        String firstName = "firstName";
-        String lastName = "lastName";
         String email = "firstName.lastName@mail.com";
         String password = "password";
+        String firstName = "firstName";
+        String lastName = "lastName";
         String phoneNumber = "phoneNumber";
         String address = "address";
 
-        Customer customer = new Customer(firstName, lastName, email, password, phoneNumber, address);
+        Customer customer = new Customer(email, password, firstName, lastName, phoneNumber, address);
 
         // WHEN
         CustomerDto actual = customerMapper.customerToCustomerDto(customer);
@@ -29,9 +29,9 @@ class CustomerMapperTest {
         // THEN
         assertThat(actual).isInstanceOf(CustomerDto.class);
         assertThat(actual.getId()).isNull();
+        assertThat(actual.getEmail()).isEqualTo(email);
         assertThat(actual.getFirstName()).isEqualTo(firstName);
         assertThat(actual.getLastName()).isEqualTo(lastName);
-        assertThat(actual.getEmail()).isEqualTo(email);
         assertThat(actual.getPhoneNumber()).isEqualTo(phoneNumber);
         assertThat(actual.getAddress()).isEqualTo(address);
     }
@@ -39,14 +39,14 @@ class CustomerMapperTest {
     @Test
     void givenCreateCustomerDto_whenMapCreateCustomerDtoToCustomer_thenGetCustomer() {
         // GIVEN
-        String firstName = "firstName";
-        String lastName = "lastName";
         String email = "firstName.lastName@mail.com";
         String password = "password";
+        String firstName = "firstName";
+        String lastName = "lastName";
         String phoneNumber = "phoneNumber";
         String address = "address";
 
-        CreateCustomerDto createCustomerDto = new CreateCustomerDto(firstName, lastName, email, password, phoneNumber, address);
+        CreateCustomerDto createCustomerDto = new CreateCustomerDto(email, password, firstName, lastName, phoneNumber, address);
 
         // WHEN
         Customer actual = customerMapper.createCustomerDtoToCustomer(createCustomerDto);
@@ -54,9 +54,9 @@ class CustomerMapperTest {
         // THEN
         assertThat(actual).isInstanceOf(Customer.class);
         assertThat(actual.getId()).isNull();
+        assertThat(actual.getEmail()).isEqualTo(email);
         assertThat(actual.getFirstName()).isEqualTo(firstName);
         assertThat(actual.getLastName()).isEqualTo(lastName);
-        assertThat(actual.getEmail()).isEqualTo(email);
         assertThat(actual.getPhoneNumber()).isEqualTo(phoneNumber);
         assertThat(actual.getAddress()).isEqualTo(address);
     }
@@ -64,14 +64,14 @@ class CustomerMapperTest {
     @Test
     void givenUpdateCustomerDto_whenMapUpdateCustomerDtoToCustomer_thenGetCustomer() {
         // GIVEN
-        String firstName = "firstName";
-        String lastName = "lastName";
         String email = "firstName.lastName@mail.com";
         String password = "password";
+        String firstName = "firstName";
+        String lastName = "lastName";
         String phoneNumber = "phoneNumber";
         String address = "address";
 
-        UpdateCustomerDto updateCustomerDto = new UpdateCustomerDto(firstName, lastName, email, password, phoneNumber, address);
+        UpdateCustomerDto updateCustomerDto = new UpdateCustomerDto(email, password, firstName, lastName, phoneNumber, address);
 
         // WHEN
         Customer actual = customerMapper.updateCustomerDtoToCustomer(updateCustomerDto);
@@ -80,9 +80,9 @@ class CustomerMapperTest {
         assertThat(actual).isInstanceOf(Customer.class);
         assertThat(actual.getId()).isNull();
         assertThat(actual.getId()).isNull();
+        assertThat(actual.getEmail()).isEqualTo(email);
         assertThat(actual.getFirstName()).isEqualTo(firstName);
         assertThat(actual.getLastName()).isEqualTo(lastName);
-        assertThat(actual.getEmail()).isEqualTo(email);
         assertThat(actual.getPhoneNumber()).isEqualTo(phoneNumber);
         assertThat(actual.getAddress()).isEqualTo(address);
     }

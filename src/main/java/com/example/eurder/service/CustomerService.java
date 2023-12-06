@@ -3,8 +3,11 @@ package com.example.eurder.service;
 import com.example.eurder.domain.Customer;
 import com.example.eurder.dto.CreateCustomerDto;
 import com.example.eurder.dto.CustomerDto;
+import com.example.eurder.exception.UnknownCustomerEmailException;
+import com.example.eurder.exception.WrongPasswordException;
 import com.example.eurder.mapper.CustomerMapper;
 import com.example.eurder.repository.CustomerRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +18,23 @@ public class CustomerService {
     public CustomerService(CustomerMapper customerMapper, CustomerRepository customerRepository) {
         this.customerMapper = customerMapper;
         this.customerRepository = customerRepository;
+    }
+
+    public Customer authenticate(String email, String password) throws UnknownCustomerEmailException, WrongPasswordException {
+        return validatePassword(getByEmail(email), password);
+    }
+
+    private Customer validatePassword(Customer customer, String password) throws WrongPasswordException {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        if (!bCryptPasswordEncoder.matches(password, customer.getPassword())) {
+            throw new WrongPasswordException();
+        }
+
+        return customer;
+    }
+
+    public Customer getByEmail(String email) {
+        return customerRepository.getByEmail(email);
     }
 
     public CustomerDto createCustomer(CreateCustomerDto createCustomerDto) {

@@ -2,18 +2,18 @@ package com.example.eurder.domain;
 
 public class Customer {
     private Integer id;
-    private String firstName;
-    private String lastName;
     private String email;
     private String password;
+    private String firstName;
+    private String lastName;
     private String phoneNumber;
     private String address;
 
-    public Customer(String firstName, String lastName, String email, String password, String phoneNumber, String address) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Customer(String email, String password, String firstName, String lastName, String phoneNumber, String address) {
         this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.address = address;
     }
@@ -26,20 +26,20 @@ public class Customer {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public String getPassword() {
         return password;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public String getPhoneNumber() {
