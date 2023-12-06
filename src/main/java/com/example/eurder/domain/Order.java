@@ -1,19 +1,19 @@
 package com.example.eurder.domain;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
     private Integer id;
     private Integer customerId;
     private String customerAddress;
+    private List<OrderLine> orderLines;
     private LocalDate orderDate;
-    private List<OrderLine> orderLines = new ArrayList<>();
 
-    public Order(Integer customerId, String customerAddress, LocalDate orderDate) {
+    public Order(Integer customerId, String customerAddress, List<OrderLine> orderLines, LocalDate orderDate) {
         this.customerId = customerId;
         this.customerAddress = customerAddress;
+        this.orderLines = orderLines;
         this.orderDate = orderDate;
     }
 
@@ -33,15 +33,11 @@ public class Order {
         return customerAddress;
     }
 
-    public LocalDate getOrderDate() {
-        return orderDate;
-    }
-
     public List<OrderLine> getOrderLines() {
         return orderLines;
     }
 
-    public void addOrderLine(OrderLine orderLine) {
-        orderLines.add(orderLine);
+    public LocalDate getOrderDate() {
+        return orderDate;
     }
 }

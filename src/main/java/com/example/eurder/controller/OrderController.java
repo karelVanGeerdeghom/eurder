@@ -23,6 +23,6 @@ public class OrderController {
     public OrderDto createOrder(@RequestHeader String email, @RequestHeader String password, @Valid @RequestBody CreateOrderDto createOrderDto) {
         Customer customer = customerService.authenticate(email, password);
 
-        return orderService.createOrder(customer, createOrderDto);
+        return orderService.placeOrder(customer, createOrderDto);
     }
 }

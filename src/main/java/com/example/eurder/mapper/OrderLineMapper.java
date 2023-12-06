@@ -1,8 +1,8 @@
 package com.example.eurder.mapper;
 
+import com.example.eurder.domain.Item;
 import com.example.eurder.domain.OrderLine;
 import com.example.eurder.dto.CreateOrderLineDto;
-import com.example.eurder.dto.ItemDto;
 import com.example.eurder.dto.OrderLineDto;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ public class OrderLineMapper {
         return new OrderLineDto(orderLine.getItemId(), orderLine.getItemName(), orderLine.getItemPrice(), orderLine.getAmountInOrder(), orderLine.getShippingDate());
     }
 
-    public OrderLine createOrderLineDtoToOrderLine(ItemDto itemDto, CreateOrderLineDto createOrderLineDto, LocalDate shippingDate) {
-        return new OrderLine(itemDto.getId(), itemDto.getName(), itemDto.getPrice(), createOrderLineDto.getAmountInOrder(), shippingDate);
+    public OrderLine createOrderLineDtoToOrderLine(Item item, CreateOrderLineDto createOrderLineDto, LocalDate shippingDate) {
+        return new OrderLine(item.getId(), item.getName(), item.getPrice(), createOrderLineDto.getAmountInOrder(), shippingDate);
     }
 }

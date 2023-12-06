@@ -12,6 +12,6 @@ public class OrderMapper {
     public OrderDto orderToOrderDto(Order order) {
         List<OrderLineDto> orderLineDtos = order.getOrderLines().stream().map(OrderLineMapper::orderLineToOrderLineDto).toList();
 
-        return new OrderDto(order.getId(), order.getCustomerId(), order.getCustomerAddress(), order.getOrderDate(), orderLineDtos);
+        return new OrderDto(order.getId(), order.getCustomerId(), order.getCustomerAddress(), orderLineDtos, order.getOrderDate());
     }
 }

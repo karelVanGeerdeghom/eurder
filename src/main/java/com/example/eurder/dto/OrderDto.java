@@ -7,15 +7,15 @@ public class OrderDto {
     private Integer id;
     private Integer customerId;
     private String customerAddress;
-    private LocalDate orderDate;
     private List<OrderLineDto> orderLineDtos;
+    private LocalDate orderDate;
 
-    public OrderDto(Integer id, Integer customerId, String customerAddress, LocalDate orderDate, List<OrderLineDto> orderLineDtos) {
+    public OrderDto(Integer id, Integer customerId, String customerAddress, List<OrderLineDto> orderLineDtos, LocalDate orderDate) {
         this.id = id;
         this.customerId = customerId;
         this.customerAddress = customerAddress;
-        this.orderDate = orderDate;
         this.orderLineDtos = orderLineDtos;
+        this.orderDate = orderDate;
     }
 
     public Integer getId() {
@@ -30,11 +30,11 @@ public class OrderDto {
         return customerAddress;
     }
 
-    public LocalDate getOrderDate() {
-        return orderDate;
-    }
-
     public List<OrderLineDto> getOrderLineDtos() {
         return orderLineDtos;
+    }
+
+    public LocalDate getOrderDate() {
+        return orderDate;
     }
 }
