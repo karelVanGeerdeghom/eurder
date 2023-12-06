@@ -21,42 +21,39 @@ import java.time.LocalDate;
 public class OrderService {
     public static final int SHIPPING_DAYS_IN_STOCK = 1;
     public static final int SHIPPING_DAYS_NOT_IN_STOCK = 7;
-    
-    private ItemMapper itemMapper;
+
+    private ItemService itemService;
     private OrderMapper orderMapper;
     private OrderLineMapper orderLineMapper;
     private OrderRepository orderRepository;
-    private ItemService itemService;
 
-    public OrderService(ItemMapper itemMapper, OrderMapper orderMapper, OrderLineMapper orderLineMapper, OrderRepository orderRepository, ItemService itemService) {
-        this.itemMapper = itemMapper;
+    public OrderService(ItemService itemService, OrderMapper orderMapper, OrderLineMapper orderLineMapper, OrderRepository orderRepository) {
+        this.itemService = itemService;
         this.orderMapper = orderMapper;
         this.orderLineMapper = orderLineMapper;
         this.orderRepository = orderRepository;
-        this.itemService = itemService;
     }
 
     public OrderDto createOrder(Customer customer, CreateOrderDto createOrderDto) throws UnknownItemIdException {
         LocalDate orderDate = LocalDate.now();
 
-        Order newOrder = new Order(customer.getId(), orderDate);
+        Order order = new Order(customer.getId(), customer.getAddress(), orderDate);
         for (CreateOrderLineDto createOrderLineDto : createOrderDto.getCreateOrderLineDtos()) {
-            newOrder.addOrderLine(createOrderLine(createOrderLineDto, orderDate));
+            order.addOrderLine(getOrderLine(createOrderLineDto, orderDate));
         }
 
-        return orderMapper.orderToOrderDto(orderRepository.create(newOrder));
+        return orderMapper.orderToOrderDto(orderRepository.create(order));
     }
 
-    private OrderLine createOrderLine(CreateOrderLineDto createOrderLineDto, LocalDate orderDate) throws UnknownItemIdException {
+    private OrderLine getOrderLine(CreateOrderLineDto createOrderLineDto, LocalDate orderDate) {
         ItemDto itemDto = itemService.getItem(createOrderLineDto.getItemId());
-        Item item = itemMapper.itemDtoToItem(itemDto);
-
-        LocalDate shippingDate = getShippingDate(item, createOrderLineDto.getAmountInOrder(), orderDate);
-
-        return new OrderLine(item.getId(), item.getName(), item.getPrice(), createOrderLineDto.getAmountInOrder(), shippingDate);
+        LocalDate shippingDate = getShippingDate(itemDto, createOrderLineDto.getAmountInOrder(), orderDate);
+        OrderLine orderLine = orderLineMapper.createOrderLineDtoToOrderLine(itemDto, createOrderLineDto, shippingDate);
+        
+        return orderLine;
     }
-
-    private LocalDate getShippingDate(Item item, int amountInOrder, LocalDate orderDate) {
-        return orderDate.plusDays(item.getAmountInStock() >= amountInOrder ? SHIPPING_DAYS_IN_STOCK : SHIPPING_DAYS_NOT_IN_STOCK);
+    
+    private LocalDate getShippingDate(ItemDto itemDto, int amountInOrder, LocalDate orderDate) {
+        return orderDate.plusDays(itemDto.getAmountInStock() >= amountInOrder ? SHIPPING_DAYS_IN_STOCK : SHIPPING_DAYS_NOT_IN_STOCK);
     }
 }

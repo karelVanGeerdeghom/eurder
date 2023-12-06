@@ -6,12 +6,14 @@ import java.util.List;
 public class OrderDto {
     private Integer id;
     private Integer customerId;
+    private String customerAddress;
     private LocalDate orderDate;
     private List<OrderLineDto> orderLineDtos;
 
-    public OrderDto(Integer id, Integer customerId, LocalDate orderDate, List<OrderLineDto> orderLineDtos) {
+    public OrderDto(Integer id, Integer customerId, String customerAddress, LocalDate orderDate, List<OrderLineDto> orderLineDtos) {
         this.id = id;
         this.customerId = customerId;
+        this.customerAddress = customerAddress;
         this.orderDate = orderDate;
         this.orderLineDtos = orderLineDtos;
     }
@@ -22,6 +24,10 @@ public class OrderDto {
 
     public Integer getCustomerId() {
         return customerId;
+    }
+
+    public String getCustomerAddress() {
+        return customerAddress;
     }
 
     public LocalDate getOrderDate() {

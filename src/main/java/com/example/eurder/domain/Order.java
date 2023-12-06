@@ -7,11 +7,13 @@ import java.util.List;
 public class Order {
     private Integer id;
     private Integer customerId;
+    private String customerAddress;
     private LocalDate orderDate;
     private List<OrderLine> orderLines = new ArrayList<>();
 
-    public Order(Integer customerId, LocalDate orderDate) {
+    public Order(Integer customerId, String customerAddress, LocalDate orderDate) {
         this.customerId = customerId;
+        this.customerAddress = customerAddress;
         this.orderDate = orderDate;
     }
 
@@ -25,6 +27,10 @@ public class Order {
 
     public Integer getCustomerId() {
         return customerId;
+    }
+
+    public String getCustomerAddress() {
+        return customerAddress;
     }
 
     public LocalDate getOrderDate() {
