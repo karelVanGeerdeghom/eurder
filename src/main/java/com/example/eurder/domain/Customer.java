@@ -1,6 +1,10 @@
 package com.example.eurder.domain;
 
-public class Customer {
+import org.springframework.util.SerializationUtils;
+
+import java.io.Serializable;
+
+public class Customer implements Serializable {
     private Integer id;
     private String email;
     private String password;
@@ -48,5 +52,9 @@ public class Customer {
 
     public String getAddress() {
         return address;
+    }
+
+    public Customer getSnapshot() {
+        return SerializationUtils.clone(this);
     }
 }

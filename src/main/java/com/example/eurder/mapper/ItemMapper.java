@@ -12,6 +12,13 @@ public class ItemMapper {
         return new ItemDto(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getAmountInStock());
     }
 
+    public Item itemDtoToItem(ItemDto itemDto) {
+        Item item = new Item(itemDto.getName(), itemDto.getDescription(), itemDto.getPrice(), itemDto.getAmountInStock());
+        item.setId(itemDto.getId());
+
+        return item;
+    }
+
     public Item createItemDtoToItem(CreateItemDto createItemDto) {
         return new Item(createItemDto.getName(), createItemDto.getDescription(), createItemDto.getPrice(), createItemDto.getAmountInStock());
     }

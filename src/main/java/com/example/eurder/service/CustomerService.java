@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
+    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     private CustomerMapper customerMapper;
     private CustomerRepository customerRepository;
 
@@ -45,6 +46,8 @@ public class CustomerService {
 
 
     public CustomerDto createCustomer(CreateCustomerDto createCustomerDto) {
+        createCustomerDto.setPassword(bCryptPasswordEncoder.encode(createCustomerDto.getPassword()));
+
         Customer customer = customerRepository.create(customerMapper.createCustomerDtoToCustomer(createCustomerDto));
         CustomerDto customerDto = customerMapper.customerToCustomerDto(customer);
 
