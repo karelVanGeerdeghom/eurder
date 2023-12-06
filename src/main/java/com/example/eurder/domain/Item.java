@@ -1,7 +1,5 @@
 package com.example.eurder.domain;
 
-import java.util.UUID;
-
 public class Item {
     private Integer id;
     private String name;

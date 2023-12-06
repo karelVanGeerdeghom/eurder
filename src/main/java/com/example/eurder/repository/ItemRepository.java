@@ -1,7 +1,6 @@
 package com.example.eurder.repository;
 
 import com.example.eurder.domain.Item;
-import com.example.eurder.exception.UnknownAdminIdException;
 import com.example.eurder.exception.UnknownItemIdException;
 import org.springframework.stereotype.Repository;
 

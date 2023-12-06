@@ -7,10 +7,8 @@ import com.example.eurder.exception.UnknownCustomerIdException;
 import com.example.eurder.exception.WrongPasswordException;
 import com.example.eurder.mapper.CustomerMapper;
 import com.example.eurder.repository.CustomerRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +22,7 @@ class CustomerServiceTest {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
         CustomerRepository customerRepository = new CustomerRepository();
+        customerRepository.truncate();
         Customer customer = new Customer("customer@eurder.com", bCryptPasswordEncoder.encode("customer"), "firstName", "lastName", "phoneNumber", "address");
         customerRepository.create(customer);
 

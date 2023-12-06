@@ -4,13 +4,27 @@ import com.example.eurder.domain.Admin;
 import com.example.eurder.exception.UnknownAdminEmailException;
 import com.example.eurder.exception.WrongPasswordException;
 import com.example.eurder.repository.AdminRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AdminServiceTest {
-    private AdminService adminService = new AdminService(new AdminRepository());
+    private AdminService adminService;
+
+    @BeforeEach
+    public void setup() {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+        AdminRepository adminRepository = new AdminRepository();
+        adminRepository.truncate();
+        Admin admin = new Admin("admin@eurder.com", bCryptPasswordEncoder.encode("admin"));
+        adminRepository.create(admin);
+
+        adminService = new AdminService(adminRepository);
+    }
 
     @Test
     void givenRightEmailAndRightPassword_whenAuthenticate_thenGetAuthenticatedAdmin() {

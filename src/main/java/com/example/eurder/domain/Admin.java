@@ -1,7 +1,5 @@
 package com.example.eurder.domain;
 
-import java.util.UUID;
-
 public class Admin {
     private Integer id;
     private String email;

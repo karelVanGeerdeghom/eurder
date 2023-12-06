@@ -2,8 +2,6 @@ package com.example.eurder.dto;
 
 import com.example.eurder.domain.Price;
 
-import java.util.UUID;
-
 public class ItemDto {
     private Integer id;
     private String name;

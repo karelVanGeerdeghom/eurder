@@ -1,10 +1,8 @@
 package com.example.eurder.repository;
 
-import com.example.eurder.domain.Admin;
 import com.example.eurder.domain.Customer;
 import com.example.eurder.exception.UnknownCustomerEmailException;
 import com.example.eurder.exception.UnknownCustomerIdException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
