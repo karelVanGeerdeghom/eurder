@@ -3,30 +3,25 @@ package com.example.eurder.domain;
 import java.util.UUID;
 
 public class Admin {
-    private String id;
+    private Integer id;
     private String email;
     private String password;
 
     public Admin(String email, String password) {
-        this.id = UUID.randomUUID().toString();
         this.email = email;
         this.password = password;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPassword() {

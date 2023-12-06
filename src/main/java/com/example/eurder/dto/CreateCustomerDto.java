@@ -1,7 +1,6 @@
-package com.example.eurder.domain;
+package com.example.eurder.dto;
 
-public class Customer {
-    private Integer id;
+public class CreateCustomerDto {
     private String firstName;
     private String lastName;
     private String email;
@@ -9,21 +8,13 @@ public class Customer {
     private String phoneNumber;
     private String address;
 
-    public Customer(String firstName, String lastName, String email, String password, String phoneNumber, String address) {
+    public CreateCustomerDto(String firstName, String lastName, String email, String password, String phoneNumber, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.address = address;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getFirstName() {
