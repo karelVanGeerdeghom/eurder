@@ -3,37 +3,39 @@ package com.example.eurder.domain;
 import java.time.LocalDate;
 
 public class OrderLine {
-    private Item item;
+    private Integer itemId;
+    private String itemName;
+    private Price itemPrice;
     private int amountInOrder;
     private LocalDate shippingDate;
 
-    public OrderLine(Item item, int amountInOrder, LocalDate shippingDate) {
-        this.item = item;
+    public OrderLine(Integer itemId, String itemName, Price itemPrice, int amountInOrder, LocalDate shippingDate) {
+        System.out.println(shippingDate);
+
+        this.itemId = itemId;
+        this.itemName = itemName;
+        this.itemPrice = itemPrice;
         this.amountInOrder = amountInOrder;
         this.shippingDate = shippingDate;
     }
 
-    public Item getItem() {
-        return item;
+    public Integer getItemId() {
+        return itemId;
     }
 
-    public void setItem(Item item) {
-        this.item = item;
+    public String getItemName() {
+        return itemName;
+    }
+
+    public Price getItemPrice() {
+        return itemPrice;
     }
 
     public int getAmountInOrder() {
         return amountInOrder;
     }
 
-    public void setAmountInOrder(int amountInOrder) {
-        this.amountInOrder = amountInOrder;
-    }
-
     public LocalDate getShippingDate() {
         return shippingDate;
-    }
-
-    public void setShippingDate(LocalDate shippingDate) {
-        this.shippingDate = shippingDate;
     }
 }

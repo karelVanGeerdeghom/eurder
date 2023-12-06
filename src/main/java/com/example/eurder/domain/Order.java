@@ -6,12 +6,12 @@ import java.util.List;
 
 public class Order {
     private Integer id;
-    private Customer customer;
+    private Integer customerId;
     private LocalDate orderDate;
     private List<OrderLine> orderLines = new ArrayList<>();
 
-    public Order(Customer customer, LocalDate orderDate) {
-        this.customer = customer;
+    public Order(Integer customerId, LocalDate orderDate) {
+        this.customerId = customerId;
         this.orderDate = orderDate;
     }
 
@@ -23,20 +23,12 @@ public class Order {
         this.id = id;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public Integer getCustomerId() {
+        return customerId;
     }
 
     public LocalDate getOrderDate() {
         return orderDate;
-    }
-
-    public void setOrderDate(LocalDate orderDate) {
-        this.orderDate = orderDate;
     }
 
     public List<OrderLine> getOrderLines() {
@@ -45,9 +37,5 @@ public class Order {
 
     public void addOrderLine(OrderLine orderLine) {
         orderLines.add(orderLine);
-    }
-
-    public void setOrderLines(List<OrderLine> orderLines) {
-        this.orderLines = orderLines;
     }
 }

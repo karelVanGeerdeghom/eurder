@@ -1,18 +1,20 @@
 package com.example.eurder.dto;
 
+import com.example.eurder.domain.OrderLine;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDto {
     private Integer id;
-    private CustomerDto customerDto;
+    private Integer customerId;
     private LocalDate orderDate;
     private List<OrderLineDto> orderLineDtos;
 
-    public OrderDto(Integer id, CustomerDto customerDto, LocalDate orderDate, List<OrderLineDto> orderLineDtos) {
+    public OrderDto(Integer id, Integer customerId, LocalDate orderDate, List<OrderLineDto> orderLineDtos) {
         this.id = id;
-        this.customerDto = customerDto;
+        this.customerId = customerId;
         this.orderDate = orderDate;
         this.orderLineDtos = orderLineDtos;
     }
@@ -21,8 +23,8 @@ public class OrderDto {
         return id;
     }
 
-    public CustomerDto getCustomerDto() {
-        return customerDto;
+    public Integer getCustomerId() {
+        return customerId;
     }
 
     public LocalDate getOrderDate() {

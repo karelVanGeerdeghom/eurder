@@ -3,25 +3,19 @@ package com.example.eurder.dto;
 import java.time.LocalDate;
 
 public class CreateOrderLineDto {
-    private ItemDto itemDto;
+    private Integer itemId;
     private int amountInOrder;
-    private LocalDate shippingDate;
 
-    public CreateOrderLineDto(ItemDto itemDto, int amountInOrder, LocalDate shippingDate) {
-        this.itemDto = itemDto;
+    public CreateOrderLineDto(Integer itemId, int amountInOrder) {
+        this.itemId = itemId;
         this.amountInOrder = amountInOrder;
-        this.shippingDate = shippingDate;
     }
 
-    public ItemDto getItemDto() {
-        return itemDto;
+    public Integer getItemId() {
+        return itemId;
     }
 
     public int getAmountInOrder() {
         return amountInOrder;
-    }
-
-    public LocalDate getShippingDate() {
-        return shippingDate;
     }
 }

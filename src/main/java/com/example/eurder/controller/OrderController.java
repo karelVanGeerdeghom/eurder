@@ -20,11 +20,9 @@ public class OrderController {
     }
 
     @PostMapping
-    public CreateOrderDto createOrder(@RequestHeader String email, @RequestHeader String password, @Valid @RequestBody CreateOrderDto createOrderDto) {
+    public OrderDto createOrder(@RequestHeader String email, @RequestHeader String password, @Valid @RequestBody CreateOrderDto createOrderDto) {
         Customer customer = customerService.authenticate(email, password);
 
-        orderService.createOrder(customer, createOrderDto);
-
-        return createOrderDto;
+        return orderService.createOrder(customer, createOrderDto);
     }
 }
