@@ -3,10 +3,12 @@ package com.example.eurder.repository;
 import com.example.eurder.domain.Currency;
 import com.example.eurder.domain.Item;
 import com.example.eurder.domain.Price;
+import com.example.eurder.exception.UnknownItemIdException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ItemRepositoryTest {
     private ItemRepository itemRepository = new ItemRepository();
@@ -56,5 +58,14 @@ class ItemRepositoryTest {
         assertThat(actual.getDescription()).isEqualTo(description);
         assertThat(actual.getPrice()).isEqualTo(price);
         assertThat(actual.getAmountInStock()).isEqualTo(amountInStock);
+    }
+
+    @Test
+    void givenUnknownId_whenGetItemById_thenThrowUnknownItemIdException() {
+        // GIVEN
+        Integer id = 1;
+
+        // WHEN + THEN
+        assertThatThrownBy(() -> itemRepository.getById(id)).isInstanceOf(UnknownItemIdException.class);
     }
 }

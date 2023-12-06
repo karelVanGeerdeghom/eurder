@@ -16,7 +16,12 @@ public class ItemMapper {
         return new Item(createItemDto.getName(), createItemDto.getDescription(), createItemDto.getPrice(), createItemDto.getAmountInStock());
     }
 
-    public Item updateItemDtoToItem(UpdateItemDto updateItemDto) {
-        return new Item(updateItemDto.getName(), updateItemDto.getDescription(), updateItemDto.getPrice(), updateItemDto.getAmountInStock());
+    public Item updateItemDtoToItem(Item item, UpdateItemDto updateItemDto) {
+        item.setName(updateItemDto.getName());
+        item.setDescription(updateItemDto.getDescription());
+        item.setPrice(updateItemDto.getPrice());
+        item.setAmountInStock(updateItemDto.getAmountInStock());
+
+        return item;
     }
 }

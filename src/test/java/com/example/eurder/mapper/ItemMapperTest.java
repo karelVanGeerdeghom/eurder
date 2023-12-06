@@ -62,10 +62,11 @@ class ItemMapperTest {
         String description = "description";
         Price price = new Price(10.0, Currency.EUR);
         int amountInStock = 10;
+        Item item = new Item(name, description, price, amountInStock);
         UpdateItemDto updateItemDto = new UpdateItemDto(name, description, price, amountInStock);
 
         // WHEN
-        Item actual = itemMapper.updateItemDtoToItem(updateItemDto);
+        Item actual = itemMapper.updateItemDtoToItem(item, updateItemDto);
 
         // THEN
         assertThat(actual).isInstanceOf(Item.class);

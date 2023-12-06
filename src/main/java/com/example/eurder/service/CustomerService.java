@@ -10,6 +10,9 @@ import com.example.eurder.repository.CustomerRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CustomerService {
     private CustomerMapper customerMapper;
@@ -49,5 +52,9 @@ public class CustomerService {
         CustomerDto customerDto = customerMapper.customerToCustomerDto(customer);
 
         return customerDto;
+    }
+
+    public List<CustomerDto> getAllCustomers() {
+        return customerRepository.getAll().stream().map(customerMapper::customerToCustomerDto).collect(Collectors.toList());
     }
 }

@@ -2,6 +2,7 @@ package com.example.eurder.controller;
 
 import com.example.eurder.dto.CreateItemDto;
 import com.example.eurder.dto.ItemDto;
+import com.example.eurder.dto.UpdateItemDto;
 import com.example.eurder.service.AdminService;
 import com.example.eurder.service.ItemService;
 import jakarta.validation.Valid;
@@ -23,6 +24,13 @@ public class ItemController {
         adminService.authenticate(email, password);
 
         return itemService.createItem(createItemDto);
+    }
+
+    @PutMapping("/{id}")
+    public ItemDto updateItem(@RequestHeader String email, @RequestHeader String password, @PathVariable Integer id, @Valid @RequestBody UpdateItemDto updateItemDto) {
+        adminService.authenticate(email, password);
+
+        return itemService.updateItem(id, updateItemDto);
     }
 
     @GetMapping("/{id}")

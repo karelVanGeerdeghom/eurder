@@ -1,17 +1,34 @@
 package com.example.eurder.service;
 
 import com.example.eurder.domain.Customer;
+import com.example.eurder.dto.CustomerDto;
 import com.example.eurder.exception.UnknownCustomerEmailException;
+import com.example.eurder.exception.UnknownCustomerIdException;
 import com.example.eurder.exception.WrongPasswordException;
 import com.example.eurder.mapper.CustomerMapper;
 import com.example.eurder.repository.CustomerRepository;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CustomerServiceTest {
-    private CustomerService customerService = new CustomerService(new CustomerMapper(), new CustomerRepository());
+    private CustomerService customerService;
+
+    @BeforeEach
+    public void setup() {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+        CustomerRepository customerRepository = new CustomerRepository();
+        Customer customer = new Customer("customer@eurder.com", bCryptPasswordEncoder.encode("customer"), "firstName", "lastName", "phoneNumber", "address");
+        customerRepository.create(customer);
+
+        customerService = new CustomerService(new CustomerMapper(), customerRepository);
+    }
 
     @Test
     void givenRightEmailAndRightPassword_whenAuthenticate_thenGetAuthenticatedCustomer() {
@@ -54,5 +71,26 @@ class CustomerServiceTest {
 
         // WHEN + THEN
         assertThatThrownBy(() -> customerService.authenticate(email, password)).isInstanceOf(UnknownCustomerEmailException.class);
+    }
+
+    @Test
+    void givenExistingId_whenGetCustomerById_thenGetCustomerWithGivenId() {
+        // GIVEN
+        Integer id = 1;
+
+        // WHEN
+        CustomerDto actual = customerService.getCustomer(id);
+
+        // THEN
+        assertThat(actual).isInstanceOf(CustomerDto.class);
+    }
+
+    @Test
+    void givenWrongId_whenGetCustomerById_thenThrowUnknownCustomerIdException() {
+        // GIVEN
+        Integer id = 0;
+
+        // WHEN + THEN
+        assertThatThrownBy(() -> customerService.getCustomer(id)).isInstanceOf(UnknownCustomerIdException.class);
     }
 }

@@ -7,6 +7,8 @@ import com.example.eurder.service.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/customers")
 public class CustomerController {
@@ -23,15 +25,17 @@ public class CustomerController {
         return customerService.createCustomer(createCustomerDto);
     }
 
-//    @GetMapping
-//    public CustomerDto[] getCustomers(@RequestHeader String email, @RequestHeader String password) {
-//        return customerService.createCustomer(createCustomerDto);
-//    }
-
     @GetMapping("/{id}")
     public CustomerDto getCustomer(@RequestHeader String email, @RequestHeader String password, @PathVariable Integer id) {
         adminService.authenticate(email, password);
 
         return customerService.getCustomer(id);
+    }
+
+    @GetMapping
+    public List<CustomerDto> getCustomers(@RequestHeader String email, @RequestHeader String password) {
+        adminService.authenticate(email, password);
+
+        return customerService.getAllCustomers();
     }
 }

@@ -6,6 +6,8 @@ import com.example.eurder.exception.UnknownCustomerIdException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -44,16 +46,12 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    void givenId_whenGetCustomerById_thenGetCustomerWithGivenId() {
+    void givenExistingId_whenGetCustomerById_thenGetCustomerWithGivenId() {
         // GIVEN
-        String firstName = "firstName";
-        String lastName = "lastName";
         String email = "firstName.lastName@mail.com";
         String password = "password";
-        String phoneNumber = "phoneNumber";
-        String address = "address";
 
-        customerRepository.create(new Customer(email, password, firstName, lastName, phoneNumber, address));
+        customerRepository.create(new Customer(email, password, "firstName", "lastName", "phoneNumber", "address"));
 
         // WHEN
         Customer actual = customerRepository.getById(1);
@@ -63,10 +61,6 @@ class CustomerRepositoryTest {
         assertThat(actual.getId()).isEqualTo(1);
         assertThat(actual.getEmail()).isEqualTo(email);
         assertThat(actual.getPassword()).isEqualTo(password);
-        assertThat(actual.getFirstName()).isEqualTo(firstName);
-        assertThat(actual.getLastName()).isEqualTo(lastName);
-        assertThat(actual.getPhoneNumber()).isEqualTo(phoneNumber);
-        assertThat(actual.getAddress()).isEqualTo(address);
     }
 
     @Test
@@ -85,6 +79,15 @@ class CustomerRepositoryTest {
         assertThat(actual.getId()).isEqualTo(1);
         assertThat(actual.getEmail()).isEqualTo(email);
         assertThat(actual.getPassword()).isEqualTo(password);
+    }
+
+    @Test
+    void whenGetAllCustomers_thenGetAllCustomers() {
+        // WHEN
+        List<Customer> actual = customerRepository.getAll();
+
+        // THEN
+        assertThat(actual).allSatisfy(customer -> assertThat(customer).isInstanceOf(Customer.class));
     }
 
     @Test

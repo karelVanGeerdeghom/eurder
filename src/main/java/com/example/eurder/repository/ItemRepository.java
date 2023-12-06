@@ -1,6 +1,8 @@
 package com.example.eurder.repository;
 
 import com.example.eurder.domain.Item;
+import com.example.eurder.exception.UnknownAdminIdException;
+import com.example.eurder.exception.UnknownItemIdException;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -18,18 +20,18 @@ public class ItemRepository {
         return save(item);
     }
 
-    private Item save(Item item) {
+    public Item save(Item item) {
         items.put(item.getId(), item);
 
         return item;
     }
 
-    public Item getById(Integer id) {
-        return items.get(id);
-    }
-
     public void truncate() {
         autoIncrementId = 0;
         items = new HashMap<>();
+    }
+
+    public Item getById(Integer id) {
+        return items.values().stream().filter(item -> item.getId().equals(id)).findFirst().orElseThrow(UnknownItemIdException::new);
     }
 }
