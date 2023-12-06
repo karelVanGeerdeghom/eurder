@@ -1,9 +1,6 @@
 package com.example.eurder.dto;
 
-import com.example.eurder.domain.OrderLine;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDto {

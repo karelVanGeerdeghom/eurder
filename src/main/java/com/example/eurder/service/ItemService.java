@@ -9,8 +9,6 @@ import com.example.eurder.mapper.ItemMapper;
 import com.example.eurder.repository.ItemRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-
 @Service
 public class ItemService {
     private ItemMapper itemMapper;

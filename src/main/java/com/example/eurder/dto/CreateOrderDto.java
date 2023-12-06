@@ -1,6 +1,5 @@
 package com.example.eurder.dto;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class CreateOrderDto {
