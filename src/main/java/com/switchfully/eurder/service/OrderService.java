@@ -49,7 +49,7 @@ public class OrderService {
         return orderMapper.orderToOrderDto(order);
     }
 
-    public OrderDto duplicateOrder(Customer customer, Integer id, DuplicateOrderDto duplicateOrderDto) {
+    public OrderDto duplicateOrder(Customer customer, Integer id, DuplicateOrderDto duplicateOrderDto) throws NoOrderLinesException, InvalidAmountInOrderInOrderLineException, UnknownItemIdException {
         CreateOrderDto createOrderDto = orderMapper.duplicateOrderToCreateOrderDto(orderRepository.getById(id), duplicateOrderDto);
 
         Order order = createOrder(customer, createOrderDto);

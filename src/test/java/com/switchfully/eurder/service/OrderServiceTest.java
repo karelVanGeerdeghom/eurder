@@ -3,6 +3,7 @@ package com.switchfully.eurder.service;
 import com.switchfully.eurder.domain.*;
 import com.switchfully.eurder.dto.CreateOrderDto;
 import com.switchfully.eurder.dto.CreateOrderLineDto;
+import com.switchfully.eurder.dto.DuplicateOrderDto;
 import com.switchfully.eurder.dto.OrderDto;
 import com.switchfully.eurder.exception.InvalidAmountInOrderInOrderLineException;
 import com.switchfully.eurder.exception.NoOrderLinesException;
@@ -86,6 +87,29 @@ class OrderServiceTest {
         assertThat(actual.getTotalPrice()).isEqualTo(new Price(20.0, Currency.EUR));
         assertThat(itemOne.getAmountInStock()).isEqualTo(9);
         assertThat(itemTwo.getAmountInStock()).isEqualTo(9);
+    }
+
+    @Test
+    void givenCustomerAndExistingId_whenDuplicateOrder_thenGetOrderDto() {
+        // GIVEN
+        LocalDate orderDate = LocalDate.now();
+        List<CreateOrderLineDto> createOrderLineDtos = new ArrayList<>(){{
+            add(new CreateOrderLineDto(itemOne.getId(), 1));
+            add(new CreateOrderLineDto(itemTwo.getId(), 1));
+        }};
+        CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos, orderDate);
+        OrderDto orderDto = orderService.placeOrder(customerOne, createOrderDto);
+
+        DuplicateOrderDto duplicateOrderDto = new DuplicateOrderDto(orderDate);
+
+        // WHEN
+        OrderDto actual = orderService.duplicateOrder(customerOne, orderDto.getId(), duplicateOrderDto);
+        // THEN
+        assertThat(actual).isInstanceOf(OrderDto.class);
+        assertThat(actual.getOrderLineDtos()).hasSize(2);
+        assertThat(actual.getTotalPrice()).isEqualTo(new Price(20.0, Currency.EUR));
+        assertThat(itemOne.getAmountInStock()).isEqualTo(8);
+        assertThat(itemTwo.getAmountInStock()).isEqualTo(8);
     }
 
     @Test
