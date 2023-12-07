@@ -9,9 +9,9 @@ public class ItemDto {
     private String name;
     private String description;
     private Price price;
-    private int amountInStock;
+    private Integer amountInStock;
 
-    public ItemDto(Integer id, String name, String description, Price price, int amountInStock) {
+    public ItemDto(Integer id, String name, String description, Price price, Integer amountInStock) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -48,7 +48,7 @@ public class ItemDto {
         return price;
     }
 
-    public int getAmountInStock() {
+    public Integer getAmountInStock() {
         return amountInStock;
     }
 }

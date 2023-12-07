@@ -11,9 +11,10 @@ public class UpdateItemDto {
     private String description;
     @NotNull
     private Price price;
-    private int amountInStock;
+    @NotNull
+    private Integer amountInStock;
 
-    public UpdateItemDto(String name, String description, Price price, int amountInStock) {
+    public UpdateItemDto(String name, String description, Price price, Integer amountInStock) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -32,7 +33,7 @@ public class UpdateItemDto {
         return price;
     }
 
-    public int getAmountInStock() {
+    public Integer getAmountInStock() {
         return amountInStock;
     }
 }

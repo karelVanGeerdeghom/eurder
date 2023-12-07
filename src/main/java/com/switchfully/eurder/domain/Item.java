@@ -7,9 +7,9 @@ public class Item {
     private String name;
     private String description;
     private Price price;
-    private int amountInStock;
+    private Integer amountInStock;
 
-    public Item(String name, String description, Price price, int amountInStock) {
+    public Item(String name, String description, Price price, Integer amountInStock) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -61,11 +61,11 @@ public class Item {
         this.price = price;
     }
 
-    public int getAmountInStock() {
+    public Integer getAmountInStock() {
         return amountInStock;
     }
 
-    public void setAmountInStock(int amountInStock) {
+    public void setAmountInStock(Integer amountInStock) {
         this.amountInStock = amountInStock;
     }
 }

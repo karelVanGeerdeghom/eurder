@@ -6,10 +6,10 @@ public class OrderLine {
     private Integer itemId;
     private String itemName;
     private Price itemPrice;
-    private int amountInOrder;
+    private Integer amountInOrder;
     private LocalDate shippingDate;
 
-    public OrderLine(Integer itemId, String itemName, Price itemPrice, int amountInOrder, LocalDate shippingDate) {
+    public OrderLine(Integer itemId, String itemName, Price itemPrice, Integer amountInOrder, LocalDate shippingDate) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
@@ -29,7 +29,7 @@ public class OrderLine {
         return itemPrice;
     }
 
-    public int getAmountInOrder() {
+    public Integer getAmountInOrder() {
         return amountInOrder;
     }
 

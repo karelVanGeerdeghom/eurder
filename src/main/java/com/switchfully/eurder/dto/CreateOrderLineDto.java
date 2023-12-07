@@ -5,9 +5,10 @@ import jakarta.validation.constraints.NotNull;
 public class CreateOrderLineDto {
     @NotNull
     private Integer itemId;
-    private int amountInOrder;
+    @NotNull
+    private Integer amountInOrder;
 
-    public CreateOrderLineDto(Integer itemId, int amountInOrder) {
+    public CreateOrderLineDto(Integer itemId, Integer amountInOrder) {
         this.itemId = itemId;
         this.amountInOrder = amountInOrder;
     }
@@ -16,7 +17,7 @@ public class CreateOrderLineDto {
         return itemId;
     }
 
-    public int getAmountInOrder() {
+    public Integer getAmountInOrder() {
         return amountInOrder;
     }
 }

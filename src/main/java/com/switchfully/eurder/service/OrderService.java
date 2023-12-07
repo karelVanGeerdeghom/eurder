@@ -82,7 +82,7 @@ public class OrderService {
         return orderLine;
     }
 
-    private LocalDate getShippingDate(Item item, int amountInOrder, LocalDate orderDate) {
+    private LocalDate getShippingDate(Item item, Integer amountInOrder, LocalDate orderDate) {
         return orderDate.plusDays(item.getAmountInStock() >= amountInOrder ? SHIPPING_DAYS_IN_STOCK : SHIPPING_DAYS_NOT_IN_STOCK);
     }
 
