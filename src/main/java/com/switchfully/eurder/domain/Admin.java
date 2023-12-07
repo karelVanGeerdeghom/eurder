@@ -3,7 +3,7 @@ package com.switchfully.eurder.domain;
 public class Admin {
     private Integer id;
     private final String email;
-    private String password;
+    private final String password;
 
     public Admin(String email, String password) {
         this.email = email;
@@ -24,9 +24,5 @@ public class Admin {
 
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }
