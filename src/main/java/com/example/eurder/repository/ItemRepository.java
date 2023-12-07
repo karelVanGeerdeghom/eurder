@@ -1,10 +1,12 @@
 package com.example.eurder.repository;
 
 import com.example.eurder.domain.Item;
+import com.example.eurder.dto.ItemDto;
 import com.example.eurder.exception.UnknownItemIdException;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -32,5 +34,9 @@ public class ItemRepository {
 
     public Item getById(Integer id) {
         return items.values().stream().filter(item -> item.getId().equals(id)).findFirst().orElseThrow(UnknownItemIdException::new);
+    }
+
+    public List<Item> getAllItems() {
+        return items.values().stream().toList();
     }
 }

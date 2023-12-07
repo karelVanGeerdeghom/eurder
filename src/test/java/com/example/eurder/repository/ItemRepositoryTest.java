@@ -7,6 +7,8 @@ import com.example.eurder.exception.UnknownItemIdException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -67,5 +69,22 @@ class ItemRepositoryTest {
 
         // WHEN + THEN
         assertThatThrownBy(() -> itemRepository.getById(id)).isInstanceOf(UnknownItemIdException.class);
+    }
+
+    @Test
+    void givenMultipleItems_whenGetAllItems_thenGetAllItems() {
+        // GIVEN
+        Item itemOne = new Item("name", "description", new Price(10.0, Currency.EUR), 10);
+        itemRepository.create(itemOne);
+
+        Item itemTwo = new Item("name", "description", new Price(10.0, Currency.EUR), 10);
+        itemRepository.create(itemTwo);
+
+        // WHEN
+        List<Item> actual = itemRepository.getAllItems();
+
+        // THEN
+        assertThat(actual).containsExactly(itemOne, itemTwo);
+
     }
 }

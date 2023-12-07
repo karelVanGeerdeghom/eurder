@@ -20,7 +20,6 @@ class CustomerMapperTest {
         String lastName = "lastName";
         String phoneNumber = "phoneNumber";
         String address = "address";
-
         Customer customer = new Customer(email, password, firstName, lastName, phoneNumber, address);
 
         // WHEN
@@ -29,11 +28,11 @@ class CustomerMapperTest {
         // THEN
         assertThat(actual).isInstanceOf(CustomerDto.class);
         assertThat(actual.getId()).isNull();
-        assertThat(actual.getEmail()).isEqualTo(email);
-        assertThat(actual.getFirstName()).isEqualTo(firstName);
-        assertThat(actual.getLastName()).isEqualTo(lastName);
-        assertThat(actual.getPhoneNumber()).isEqualTo(phoneNumber);
-        assertThat(actual.getAddress()).isEqualTo(address);
+        assertThat(actual.getEmail()).isEqualTo(customer.getEmail());
+        assertThat(actual.getFirstName()).isEqualTo(customer.getFirstName());
+        assertThat(actual.getLastName()).isEqualTo(customer.getLastName());
+        assertThat(actual.getPhoneNumber()).isEqualTo(customer.getPhoneNumber());
+        assertThat(actual.getAddress()).isEqualTo(customer.getAddress());
     }
 
     @Test
@@ -45,7 +44,6 @@ class CustomerMapperTest {
         String lastName = "lastName";
         String phoneNumber = "phoneNumber";
         String address = "address";
-
         CreateCustomerDto createCustomerDto = new CreateCustomerDto(email, password, firstName, lastName, phoneNumber, address);
 
         // WHEN
@@ -54,11 +52,11 @@ class CustomerMapperTest {
         // THEN
         assertThat(actual).isInstanceOf(Customer.class);
         assertThat(actual.getId()).isNull();
-        assertThat(actual.getEmail()).isEqualTo(email);
-        assertThat(actual.getFirstName()).isEqualTo(firstName);
-        assertThat(actual.getLastName()).isEqualTo(lastName);
-        assertThat(actual.getPhoneNumber()).isEqualTo(phoneNumber);
-        assertThat(actual.getAddress()).isEqualTo(address);
+        assertThat(actual.getEmail()).isEqualTo(createCustomerDto.getEmail());
+        assertThat(actual.getFirstName()).isEqualTo(createCustomerDto.getFirstName());
+        assertThat(actual.getLastName()).isEqualTo(createCustomerDto.getLastName());
+        assertThat(actual.getPhoneNumber()).isEqualTo(createCustomerDto.getPhoneNumber());
+        assertThat(actual.getAddress()).isEqualTo(createCustomerDto.getAddress());
     }
 
     @Test
@@ -70,7 +68,6 @@ class CustomerMapperTest {
         String lastName = "lastName";
         String phoneNumber = "phoneNumber";
         String address = "address";
-
         UpdateCustomerDto updateCustomerDto = new UpdateCustomerDto(email, password, firstName, lastName, phoneNumber, address);
 
         // WHEN
@@ -79,11 +76,10 @@ class CustomerMapperTest {
         // THEN
         assertThat(actual).isInstanceOf(Customer.class);
         assertThat(actual.getId()).isNull();
-        assertThat(actual.getId()).isNull();
-        assertThat(actual.getEmail()).isEqualTo(email);
-        assertThat(actual.getFirstName()).isEqualTo(firstName);
-        assertThat(actual.getLastName()).isEqualTo(lastName);
-        assertThat(actual.getPhoneNumber()).isEqualTo(phoneNumber);
-        assertThat(actual.getAddress()).isEqualTo(address);
+        assertThat(actual.getEmail()).isEqualTo(updateCustomerDto.getEmail());
+        assertThat(actual.getFirstName()).isEqualTo(updateCustomerDto.getFirstName());
+        assertThat(actual.getLastName()).isEqualTo(updateCustomerDto.getLastName());
+        assertThat(actual.getPhoneNumber()).isEqualTo(updateCustomerDto.getPhoneNumber());
+        assertThat(actual.getAddress()).isEqualTo(updateCustomerDto.getAddress());
     }
 }

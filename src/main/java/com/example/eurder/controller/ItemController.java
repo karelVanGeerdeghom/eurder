@@ -8,6 +8,8 @@ import com.example.eurder.service.ItemService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/items")
 public class ItemController {
@@ -36,5 +38,10 @@ public class ItemController {
     @GetMapping("/{id}")
     public ItemDto getItem(@PathVariable Integer id) {
         return itemService.getItem(id);
+    }
+
+    @GetMapping
+    public List<ItemDto> getItems() {
+        return itemService.getAllItems();
     }
 }

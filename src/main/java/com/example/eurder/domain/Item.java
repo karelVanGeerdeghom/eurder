@@ -4,7 +4,7 @@ import org.springframework.util.SerializationUtils;
 
 import java.io.Serializable;
 
-public class Item implements Serializable {
+public class Item {
     private Integer id;
     private String name;
     private String description;
@@ -56,9 +56,5 @@ public class Item implements Serializable {
 
     public void setAmountInStock(int amountInStock) {
         this.amountInStock = amountInStock;
-    }
-
-    public Item getSnapshot() {
-        return SerializationUtils.clone(this);
     }
 }

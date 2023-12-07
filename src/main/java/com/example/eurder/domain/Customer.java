@@ -4,7 +4,7 @@ import org.springframework.util.SerializationUtils;
 
 import java.io.Serializable;
 
-public class Customer implements Serializable {
+public class Customer {
     private Integer id;
     private String email;
     private String password;
@@ -52,9 +52,5 @@ public class Customer implements Serializable {
 
     public String getAddress() {
         return address;
-    }
-
-    public Customer getSnapshot() {
-        return SerializationUtils.clone(this);
     }
 }
