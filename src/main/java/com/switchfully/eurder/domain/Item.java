@@ -1,5 +1,7 @@
 package com.switchfully.eurder.domain;
 
+import java.util.Objects;
+
 public class Item {
     private Integer id;
     private String name;
@@ -12,6 +14,19 @@ public class Item {
         this.description = description;
         this.price = price;
         this.amountInStock = amountInStock;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return amountInStock == item.amountInStock && Objects.equals(id, item.id) && Objects.equals(name, item.name) && Objects.equals(description, item.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, amountInStock);
     }
 
     public Integer getId() {

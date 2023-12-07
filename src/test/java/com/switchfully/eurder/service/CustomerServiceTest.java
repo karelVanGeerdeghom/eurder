@@ -81,6 +81,30 @@ class CustomerServiceTest {
     }
 
     @Test
+    void givenCreateCustomerDto_whenCreateCustomer_thenGetCustomerDto() {
+        // GIVEN
+        String email = "firstName.lastName@mail.com";
+        String password = "password";
+        String firstName = "firstName";
+        String lastName = "lastName";
+        String phoneNumber = "phoneNumber";
+        String address = "address";
+        CreateCustomerDto createCustomerDto = new CreateCustomerDto(email, password, firstName, lastName, phoneNumber, address);
+
+        // WHEN
+        CustomerDto actual = customerService.createCustomer(createCustomerDto);
+
+        // THEN
+        assertThat(actual).isInstanceOf(CustomerDto.class);
+        assertThat(actual.getId()).isEqualTo(2);
+        assertThat(actual.getEmail()).isEqualTo(email);
+        assertThat(actual.getFirstName()).isEqualTo(firstName);
+        assertThat(actual.getLastName()).isEqualTo(lastName);
+        assertThat(actual.getPhoneNumber()).isEqualTo(phoneNumber);
+        assertThat(actual.getAddress()).isEqualTo(address);
+    }
+
+    @Test
     void givenExistingId_whenGetCustomerById_thenGetCustomerWithGivenId() {
         // GIVEN
         Integer id = 1;
@@ -99,31 +123,6 @@ class CustomerServiceTest {
 
         // WHEN + THEN
         assertThatThrownBy(() -> customerService.getById(id)).isInstanceOf(UnknownCustomerIdException.class);
-    }
-
-    @Test
-    void givenCreateCustomerDto_whenCreateCustomer_thenGetCustomerDto() {
-        // GIVEN
-        String email = "firstName.lastName@mail.com";
-        String password = "password";
-        String firstName = "firstName";
-        String lastName = "lastName";
-        String phoneNumber = "phoneNumber";
-        String address = "address";
-
-        CreateCustomerDto createCustomerDto = new CreateCustomerDto(email, password, firstName, lastName, phoneNumber, address);
-
-        // WHEN
-        CustomerDto actual = customerService.createCustomer(createCustomerDto);
-
-        // THEN
-        assertThat(actual).isInstanceOf(CustomerDto.class);
-        assertThat(actual.getId()).isEqualTo(2);
-        assertThat(actual.getEmail()).isEqualTo(email);
-        assertThat(actual.getFirstName()).isEqualTo(firstName);
-        assertThat(actual.getLastName()).isEqualTo(lastName);
-        assertThat(actual.getPhoneNumber()).isEqualTo(phoneNumber);
-        assertThat(actual.getAddress()).isEqualTo(address);
     }
 
     @Test

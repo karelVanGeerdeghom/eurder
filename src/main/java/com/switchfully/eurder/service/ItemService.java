@@ -38,7 +38,7 @@ public class ItemService {
         return itemDto;
     }
 
-    public ItemDto getItem(Integer id) throws UnknownItemIdException {
+    public ItemDto getById(Integer id) throws UnknownItemIdException {
         Item item = itemRepository.getById(id);
         ItemDto itemDto = itemMapper.itemToItemDto(item);
 
@@ -46,6 +46,6 @@ public class ItemService {
     }
 
     public List<ItemDto> getAllItems() {
-        return itemRepository.getAllItems().stream().map(ItemMapper::itemToItemDto).collect(Collectors.toList());
+        return itemRepository.getAllItems().stream().map(item -> itemMapper.itemToItemDto(item)).collect(Collectors.toList());
     }
 }

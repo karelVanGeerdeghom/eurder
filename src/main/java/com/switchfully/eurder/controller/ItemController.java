@@ -37,7 +37,7 @@ public class ItemController {
 
     @GetMapping("/{id}")
     public ItemDto getItem(@PathVariable Integer id) {
-        return itemService.getItem(id);
+        return itemService.getById(id);
     }
 
     @GetMapping

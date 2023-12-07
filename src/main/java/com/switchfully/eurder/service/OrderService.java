@@ -34,6 +34,8 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
+
+
     public OrderDto placeOrder(Customer customer, CreateOrderDto createOrderDto) throws UnknownItemIdException {
         Order order = createOrder(customer, createOrderDto);
         updateStock(order);
