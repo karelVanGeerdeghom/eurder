@@ -1,5 +1,8 @@
 package com.switchfully.eurder.dto;
 
+import com.switchfully.eurder.domain.Currency;
+import com.switchfully.eurder.domain.Price;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -36,5 +39,11 @@ public class OrderDto {
 
     public LocalDate getOrderDate() {
         return orderDate;
+    }
+
+    public Price getTotalPrice() {
+        double totalPriceAmount = orderLineDtos.stream().reduce(0.0, (totalPrice, orderLineDto) -> totalPrice + orderLineDto.getTotalPrice().getAmount(), Double::sum);
+
+        return new Price(totalPriceAmount, Currency.EUR);
     }
 }

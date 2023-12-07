@@ -34,6 +34,7 @@ class OrderServiceTest {
     @BeforeEach
     public void setup() {
         customer = new Customer("email", "password", "firstName", "lastName", "phoneNumber", "address");
+        customer.setId(1);
 
         itemOne = new Item("name", "description", new Price(10.0, Currency.EUR), 10);
         itemTwo = new Item("name", "description", new Price(10.0, Currency.EUR), 10);
@@ -64,11 +65,12 @@ class OrderServiceTest {
     @Test
     void givenCustomerAndCreateOrderDto_whenPlaceOrder_thenGetOrderDto() {
         // GIVEN
+        LocalDate orderDate = LocalDate.now();
         List<CreateOrderLineDto> createOrderLineDtos = new ArrayList<>(){{
             add(new CreateOrderLineDto(itemOne.getId(), 1));
             add(new CreateOrderLineDto(itemTwo.getId(), 1));
         }};
-        CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos);
+        CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos, orderDate);
 
         // WHEN
         OrderDto actual = orderService.placeOrder(customer, createOrderDto);
@@ -76,6 +78,7 @@ class OrderServiceTest {
         // THEN
         assertThat(actual).isInstanceOf(OrderDto.class);
         assertThat(actual.getOrderLineDtos()).hasSize(2);
+        assertThat(actual.getTotalPrice()).isEqualTo(new Price(20.0, Currency.EUR));
         assertThat(itemOne.getAmountInStock()).isEqualTo(9);
         assertThat(itemTwo.getAmountInStock()).isEqualTo(9);
     }
@@ -83,8 +86,9 @@ class OrderServiceTest {
     @Test
     void givenCustomerAndCreateOrderDtoWithoutCreateOrderLineDtos_whenPlaceOrder_thenThrowNoOrderLinesException() {
         // GIVEN
+        LocalDate orderDate = LocalDate.now();
         List<CreateOrderLineDto> createOrderLineDtos = new ArrayList<>();
-        CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos);
+        CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos, orderDate);
 
         // WHEN + THEN
         assertThatThrownBy(() -> orderService.placeOrder(customer, createOrderDto)).isInstanceOf(NoOrderLinesException.class);
@@ -93,10 +97,11 @@ class OrderServiceTest {
     @Test
     void givenCustomerAndCreateOrderDtoWithInvalidAmountInOrder_whenPlaceOrder_thenThrowInvalidAmountInOrderInOrderLineException() {
         // GIVEN
+        LocalDate orderDate = LocalDate.now();
         List<CreateOrderLineDto> createOrderLineDtos = new ArrayList<>(){{
             add(new CreateOrderLineDto(10, 0));
         }};
-        CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos);
+        CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos, orderDate);
 
         // WHEN + THEN
         assertThatThrownBy(() -> orderService.placeOrder(customer, createOrderDto)).isInstanceOf(InvalidAmountInOrderInOrderLineException.class);
@@ -105,10 +110,11 @@ class OrderServiceTest {
     @Test
     void givenCustomerAndCreateOrderDtoWithUnknownItemId_whenPlaceOrder_thenThrowUnknownItemIdException() {
         // GIVEN
+        LocalDate orderDate = LocalDate.now();
         List<CreateOrderLineDto> createOrderLineDtos = new ArrayList<>(){{
             add(new CreateOrderLineDto(10, 1));
         }};
-        CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos);
+        CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos, orderDate);
 
         // WHEN + THEN
         assertThatThrownBy(() -> orderService.placeOrder(customer, createOrderDto)).isInstanceOf(UnknownItemIdException.class);
@@ -117,10 +123,11 @@ class OrderServiceTest {
     @Test
     void givenCustomerAndCreateOrderDto_whenPlaceOrderAndAmountInOrderIsLessThanAmountInStock_thenShippingDateIsInStockShippingDate() {
         // GIVEN
+        LocalDate orderDate = LocalDate.now();
         List<CreateOrderLineDto> createOrderLineDtos = new ArrayList<>(){{
             add(new CreateOrderLineDto(itemOne.getId(), 1));
         }};
-        CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos);
+        CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos, orderDate);
 
         // WHEN
         OrderDto actual = orderService.placeOrder(customer, createOrderDto);
@@ -132,15 +139,53 @@ class OrderServiceTest {
     @Test
     void givenCustomerAndCreateOrderDto_whenPlaceOrderAndAmountInOrderIsMoreThanAmountInStock_thenShippingDateIsNotInStockShippingDate() {
         // GIVEN
+        LocalDate orderDate = LocalDate.now();
         List<CreateOrderLineDto> createOrderLineDtos = new ArrayList<>(){{
             add(new CreateOrderLineDto(itemOne.getId(), 100));
         }};
-        CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos);
+        CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos, orderDate);
 
         // WHEN
         OrderDto actual = orderService.placeOrder(customer, createOrderDto);
 
         // THEN
         assertThat(actual.getOrderLineDtos().getFirst().getShippingDate()).isEqualTo(LocalDate.now().plusDays(OrderService.SHIPPING_DAYS_NOT_IN_STOCK));
+    }
+
+    @Test
+    void givenCustomerAndMultipleOrders_whenGetOrders_thenGetOrderDtos() {
+        // GIVEN
+        LocalDate orderDate = LocalDate.now();
+        orderService.placeOrder(customer, new CreateOrderDto(new ArrayList<>(){{
+            add(new CreateOrderLineDto(itemOne.getId(), 1));
+        }}, orderDate));
+        orderService.placeOrder(customer, new CreateOrderDto(new ArrayList<>(){{
+            add(new CreateOrderLineDto(itemTwo.getId(), 1));
+        }}, orderDate));
+
+        // WHEN
+        List<OrderDto> actual = orderService.getAllOrdersByCustomer(customer);
+
+        // THEN
+        assertThat(actual).hasSize(2);
+        assertThat(actual).allSatisfy(orderDto -> assertThat(orderDto).isInstanceOf(OrderDto.class));
+    }
+
+    @Test
+    void givenCustomerAndMultipleOrdersShippingToday_whenGetAllOrdersShippingToday_thenGetAllOrderDtosShippingToday() {
+        // GIVEN
+        LocalDate orderDate = LocalDate.now().minusDays(1);
+        orderService.placeOrder(customer, new CreateOrderDto(new ArrayList<>(){{
+            add(new CreateOrderLineDto(itemOne.getId(), 1));
+        }}, orderDate));
+        orderService.placeOrder(customer, new CreateOrderDto(new ArrayList<>(){{
+            add(new CreateOrderLineDto(itemTwo.getId(), 1));
+        }}, orderDate));
+
+        // WHEN
+        List<OrderDto> actual = orderService.getAllOrdersShippingToday();
+        // THEN
+        assertThat(actual).hasSize(2);
+        assertThat(actual).allSatisfy(orderDto -> assertThat(orderDto).isInstanceOf(OrderDto.class));
     }
 }

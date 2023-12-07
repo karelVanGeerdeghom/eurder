@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -50,25 +51,24 @@ public class OrderService {
     }
 
     private Order createOrder(Customer customer, CreateOrderDto createOrderDto) throws InvalidAmountInOrderInOrderLineException, UnknownItemIdException {
-        LocalDate orderDate = LocalDate.now();
-        List<OrderLine> orderLines = createOrderLines(createOrderDto, orderDate);
+        List<OrderLine> orderLines = createOrderLines(createOrderDto);
 
-        return orderRepository.create(new Order(customer.getId(), customer.getAddress(), orderLines, orderDate));
+        return orderRepository.create(new Order(customer.getId(), customer.getAddress(), orderLines, createOrderDto.getOrderDate()));
     }
 
-    private List<OrderLine> createOrderLines(CreateOrderDto createOrderDto, LocalDate orderDate) throws InvalidAmountInOrderInOrderLineException, UnknownItemIdException {
+    private List<OrderLine> createOrderLines(CreateOrderDto createOrderDto) throws InvalidAmountInOrderInOrderLineException, UnknownItemIdException {
         return createOrderDto.getCreateOrderLineDtos().stream()
-                .map(createOrderLineDto -> createOrderLine(createOrderLineDto, orderDate))
+                .map(createOrderLineDto -> createOrderLine(createOrderDto, createOrderLineDto))
                 .toList();
     }
 
-    private OrderLine createOrderLine(CreateOrderLineDto createOrderLineDto, LocalDate orderDate) throws InvalidAmountInOrderInOrderLineException, UnknownItemIdException {
+    private OrderLine createOrderLine(CreateOrderDto createOrderDto, CreateOrderLineDto createOrderLineDto) throws InvalidAmountInOrderInOrderLineException, UnknownItemIdException {
         if (createOrderLineDto.getAmountInOrder() < 1) {
             throw new InvalidAmountInOrderInOrderLineException();
         }
 
         Item item = itemRepository.getById(createOrderLineDto.getItemId());
-        LocalDate shippingDate = getShippingDate(item, createOrderLineDto.getAmountInOrder(), orderDate);
+        LocalDate shippingDate = getShippingDate(item, createOrderLineDto.getAmountInOrder(), createOrderDto.getOrderDate());
         OrderLine orderLine = orderLineMapper.createOrderLineDtoToOrderLine(item, createOrderLineDto, shippingDate);
 
         return orderLine;
@@ -85,5 +85,16 @@ public class OrderService {
 
             itemRepository.save(item);
         });
+    }
+
+    public List<OrderDto> getAllOrdersByCustomer(Customer customer) {
+        return orderRepository.getAllOrdersByCustomer(customer).stream().map(order -> orderMapper.orderToOrderDto(order)).collect(Collectors.toList());
+    }
+
+    public List<OrderDto> getAllOrdersShippingToday() {
+        return orderRepository.getAllOrdersShippingToday().stream()
+                .map(order -> orderMapper.orderToOrderDto(order))
+                .map(orderDto -> new OrderDto(orderDto.getId(), orderDto.getCustomerId(), orderDto.getCustomerAddress(), orderDto.getOrderLineDtos().stream().filter(orderLineDto -> orderLineDto.getShippingDate().equals(LocalDate.now())).collect(Collectors.toList()), orderDto.getOrderDate()))
+                .collect(Collectors.toList());
     }
 }

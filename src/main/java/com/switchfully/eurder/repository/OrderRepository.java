@@ -1,11 +1,17 @@
 package com.switchfully.eurder.repository;
 
+import com.switchfully.eurder.domain.Customer;
 import com.switchfully.eurder.domain.Order;
+import com.switchfully.eurder.dto.OrderDto;
 import com.switchfully.eurder.exception.UnknownOrderIdException;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 public class OrderRepository {
@@ -32,5 +38,16 @@ public class OrderRepository {
 
     public Order getById(Integer id) {
         return orders.values().stream().filter(order -> order.getId().equals(id)).findFirst().orElseThrow(UnknownOrderIdException::new);
+    }
+
+    public List<Order> getAllOrdersByCustomer(Customer customer) {
+        return orders.values().stream().filter(order -> order.getCustomerId().equals(customer.getId())).collect(Collectors.toList());
+    }
+
+    public List<Order> getAllOrdersShippingToday() {
+        return orders.values().stream()
+                .filter(order -> order.getOrderLines().stream()
+                        .anyMatch(orderLine -> orderLine.getShippingDate().isEqual(LocalDate.now())))
+                .collect(Collectors.toList());
     }
 }

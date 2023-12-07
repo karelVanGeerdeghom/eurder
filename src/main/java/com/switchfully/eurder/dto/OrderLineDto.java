@@ -1,5 +1,6 @@
 package com.switchfully.eurder.dto;
 
+import com.switchfully.eurder.domain.Currency;
 import com.switchfully.eurder.domain.Price;
 
 import java.time.LocalDate;
@@ -37,5 +38,9 @@ public class OrderLineDto {
 
     public LocalDate getShippingDate() {
         return shippingDate;
+    }
+
+    public Price getTotalPrice() {
+        return new Price(itemPrice.getAmount() * amountInOrder, Currency.EUR);
     }
 }
