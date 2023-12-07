@@ -2,7 +2,7 @@ package com.switchfully.eurder.domain;
 
 public class Admin {
     private Integer id;
-    private String email;
+    private final String email;
     private String password;
 
     public Admin(String email, String password) {

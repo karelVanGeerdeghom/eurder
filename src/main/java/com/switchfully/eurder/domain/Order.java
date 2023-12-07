@@ -5,10 +5,10 @@ import java.util.List;
 
 public class Order {
     private Integer id;
-    private Integer customerId;
-    private String customerAddress;
-    private List<OrderLine> orderLines;
-    private LocalDate orderDate;
+    private final Integer customerId;
+    private final String customerAddress;
+    private final List<OrderLine> orderLines;
+    private final LocalDate orderDate;
 
     public Order(Integer customerId, String customerAddress, List<OrderLine> orderLines, LocalDate orderDate) {
         this.customerId = customerId;

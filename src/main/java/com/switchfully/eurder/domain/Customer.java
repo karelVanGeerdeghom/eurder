@@ -1,17 +1,13 @@
 package com.switchfully.eurder.domain;
 
-import org.springframework.util.SerializationUtils;
-
-import java.io.Serializable;
-
 public class Customer {
     private Integer id;
-    private String email;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private String address;
+    private final String email;
+    private final String password;
+    private final String firstName;
+    private final String lastName;
+    private final String phoneNumber;
+    private final String address;
 
     public Customer(String email, String password, String firstName, String lastName, String phoneNumber, String address) {
         this.email = email;
