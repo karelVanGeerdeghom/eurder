@@ -5,12 +5,9 @@ import com.switchfully.eurder.dto.CreateOrderDto;
 import com.switchfully.eurder.dto.OrderDto;
 import com.switchfully.eurder.service.CustomerService;
 import com.switchfully.eurder.service.OrderService;
-import jakarta.validation.Valid;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Validated
 @RequestMapping(path = "/orders")
 public class OrderController {
     private CustomerService customerService;
@@ -22,7 +19,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public OrderDto createOrder(@RequestHeader String email, @RequestHeader String password, @Valid @RequestBody CreateOrderDto createOrderDto) {
+    public OrderDto createOrder(@RequestHeader String email, @RequestHeader String password, @RequestBody CreateOrderDto createOrderDto) {
         Customer customer = customerService.authenticate(email, password);
 
         return orderService.placeOrder(customer, createOrderDto);

@@ -39,9 +39,9 @@ public class OrderService {
 
 
     public OrderDto placeOrder(Customer customer, CreateOrderDto createOrderDto) throws NoOrderLinesException, InvalidAmountInOrderInOrderLineException, UnknownItemIdException {
-//        if (createOrderDto.getCreateOrderLineDtos().isEmpty()) {
-//            throw new NoOrderLinesException();
-//        }
+        if (createOrderDto.getCreateOrderLineDtos().isEmpty()) {
+            throw new NoOrderLinesException();
+        }
 
         Order order = createOrder(customer, createOrderDto);
         updateStock(order);
@@ -63,9 +63,9 @@ public class OrderService {
     }
 
     private OrderLine createOrderLine(CreateOrderLineDto createOrderLineDto, LocalDate orderDate) throws InvalidAmountInOrderInOrderLineException, UnknownItemIdException {
-//        if (createOrderLineDto.getAmountInOrder() < 1) {
-//            throw new InvalidAmountInOrderInOrderLineException();
-//        }
+        if (createOrderLineDto.getAmountInOrder() < 1) {
+            throw new InvalidAmountInOrderInOrderLineException();
+        }
 
         Item item = itemRepository.getById(createOrderLineDto.getItemId());
         LocalDate shippingDate = getShippingDate(item, createOrderLineDto.getAmountInOrder(), orderDate);
