@@ -3,12 +3,12 @@ package com.switchfully.eurder.dto;
 import java.util.Objects;
 
 public class CustomerDto {
-    private Integer id;
-    private String email;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private String address;
+    private final Integer id;
+    private final String email;
+    private final String firstName;
+    private final String lastName;
+    private final String phoneNumber;
+    private final String address;
 
     public CustomerDto(Integer id, String email, String firstName, String lastName, String phoneNumber, String address) {
         this.id = id;

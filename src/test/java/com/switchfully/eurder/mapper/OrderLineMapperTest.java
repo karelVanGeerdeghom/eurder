@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class OrderLineMapperTest {
-    private OrderLineMapper orderLineMapper = new OrderLineMapper();
+    private final OrderLineMapper orderLineMapper = new OrderLineMapper();
 
     @Test
     void givenOrderLine_whenMapOrderLineToOrderLineDto_thenGetOrderLineDto() {

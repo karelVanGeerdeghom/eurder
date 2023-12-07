@@ -4,9 +4,9 @@ import jakarta.validation.constraints.NotNull;
 
 public class CreateOrderLineDto {
     @NotNull
-    private Integer itemId;
+    private final Integer itemId;
     @NotNull
-    private Integer amountInOrder;
+    private final Integer amountInOrder;
 
     public CreateOrderLineDto(Integer itemId, Integer amountInOrder) {
         this.itemId = itemId;

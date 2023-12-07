@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ItemRepositoryTest {
-    private ItemRepository itemRepository = new ItemRepository();
+    private final ItemRepository itemRepository = new ItemRepository();
 
     @BeforeEach
     void truncate() {

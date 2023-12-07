@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
-    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-    private CustomerMapper customerMapper;
-    private CustomerRepository customerRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    private final CustomerMapper customerMapper;
+    private final CustomerRepository customerRepository;
 
     public CustomerService(CustomerMapper customerMapper, CustomerRepository customerRepository) {
         this.customerMapper = customerMapper;
@@ -49,16 +49,14 @@ public class CustomerService {
         createCustomerDto.setPassword(bCryptPasswordEncoder.encode(createCustomerDto.getPassword()));
 
         Customer customer = customerRepository.create(customerMapper.createCustomerDtoToCustomer(createCustomerDto));
-        CustomerDto customerDto = customerMapper.customerToCustomerDto(customer);
 
-        return customerDto;
+        return customerMapper.customerToCustomerDto(customer);
     }
 
     public CustomerDto getById(Integer id) {
         Customer customer = customerRepository.getById(id);
-        CustomerDto customerDto = customerMapper.customerToCustomerDto(customer);
 
-        return customerDto;
+        return customerMapper.customerToCustomerDto(customer);
     }
 
     public List<CustomerDto> getAllCustomers() {

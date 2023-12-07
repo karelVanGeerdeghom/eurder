@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AdminRepositoryTest {
-    private AdminRepository adminRepository = new AdminRepository();
+    private final AdminRepository adminRepository = new AdminRepository();
 
     @BeforeEach
     void truncate() {

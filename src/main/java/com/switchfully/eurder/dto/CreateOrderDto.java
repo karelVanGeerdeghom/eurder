@@ -8,9 +8,9 @@ import java.util.List;
 
 public class CreateOrderDto {
     @Valid
-    private List<CreateOrderLineDto> createOrderLineDtos;
+    private final List<CreateOrderLineDto> createOrderLineDtos;
     @NotNull
-    private LocalDate orderDate;
+    private final LocalDate orderDate;
 
     public CreateOrderDto(List<CreateOrderLineDto> createOrderLineDtos, LocalDate orderDate) {
         this.createOrderLineDtos = createOrderLineDtos;

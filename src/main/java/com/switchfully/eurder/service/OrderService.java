@@ -24,10 +24,10 @@ public class OrderService {
     public static final int SHIPPING_DAYS_IN_STOCK = 1;
     public static final int SHIPPING_DAYS_NOT_IN_STOCK = 7;
 
-    private ItemRepository itemRepository;
-    private OrderMapper orderMapper;
-    private OrderLineMapper orderLineMapper;
-    private OrderRepository orderRepository;
+    private final ItemRepository itemRepository;
+    private final OrderMapper orderMapper;
+    private final OrderLineMapper orderLineMapper;
+    private final OrderRepository orderRepository;
 
     public OrderService(ItemRepository itemRepository, OrderMapper orderMapper, OrderLineMapper orderLineMapper, OrderRepository orderRepository) {
         this.itemRepository = itemRepository;
@@ -77,9 +77,8 @@ public class OrderService {
 
         Item item = itemRepository.getById(createOrderLineDto.getItemId());
         LocalDate shippingDate = getShippingDate(item, createOrderLineDto.getAmountInOrder(), createOrderDto.getOrderDate());
-        OrderLine orderLine = orderLineMapper.createOrderLineDtoToOrderLine(item, createOrderLineDto, shippingDate);
 
-        return orderLine;
+        return orderLineMapper.createOrderLineDtoToOrderLine(item, createOrderLineDto, shippingDate);
     }
 
     private LocalDate getShippingDate(Item item, Integer amountInOrder, LocalDate orderDate) {
@@ -98,7 +97,7 @@ public class OrderService {
 
 
     public List<OrderDto> getAllOrdersForCustomer(Customer customer) {
-        return orderRepository.getAllOrdersByCustomer(customer).stream().map(order -> orderMapper.orderToOrderDto(order)).collect(Collectors.toList());
+        return orderRepository.getAllOrdersByCustomer(customer).stream().map(orderMapper::orderToOrderDto).collect(Collectors.toList());
     }
 
     public void validateOrderByIdForCustomer(Customer customer, Integer id) throws UnknownOrderIdException, OrderIsNotForCustomerException {
@@ -114,7 +113,7 @@ public class OrderService {
 
     public List<OrderDto> getAllOrdersShippingOnDate(LocalDate shippingDate) {
         return orderRepository.getAllOrdersShippingOnDate(shippingDate).stream()
-                .map(order -> orderMapper.orderToOrderDto(order))
+                .map(orderMapper::orderToOrderDto)
                 .map(orderDto -> new OrderDto(orderDto.getId(), orderDto.getCustomerId(), orderDto.getCustomerAddress(), orderDto.getOrderLineDtos().stream().filter(orderLineDto -> orderLineDto.getShippingDate().equals(shippingDate)).collect(Collectors.toList()), orderDto.getOrderDate()))
                 .collect(Collectors.toList());
     }

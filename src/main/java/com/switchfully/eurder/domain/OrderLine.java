@@ -3,11 +3,11 @@ package com.switchfully.eurder.domain;
 import java.time.LocalDate;
 
 public class OrderLine {
-    private Integer itemId;
-    private String itemName;
-    private Price itemPrice;
-    private Integer amountInOrder;
-    private LocalDate shippingDate;
+    private final Integer itemId;
+    private final String itemName;
+    private final Price itemPrice;
+    private final Integer amountInOrder;
+    private final LocalDate shippingDate;
 
     public OrderLine(Integer itemId, String itemName, Price itemPrice, Integer amountInOrder, LocalDate shippingDate) {
         this.itemId = itemId;

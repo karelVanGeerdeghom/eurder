@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CustomerMapperTest {
-    private CustomerMapper customerMapper = new CustomerMapper();
+    private final CustomerMapper customerMapper = new CustomerMapper();
 
     @Test
     void givenCustomer_whenMapCustomerToCustomerDto_thenGetCustomerDto() {

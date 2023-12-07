@@ -1,14 +1,13 @@
 package com.switchfully.eurder.dto;
 
-import com.switchfully.eurder.domain.Price;
 import com.switchfully.eurder.domain.StockIndicator;
 
 import java.util.Objects;
 
 public class ItemStockIndicatorDto {
-    private Integer id;
-    private String name;
-    private StockIndicator stockIndicator;
+    private final Integer id;
+    private final String name;
+    private final StockIndicator stockIndicator;
 
     public ItemStockIndicatorDto(Integer id, String name, StockIndicator stockIndicator) {
         this.id = id;

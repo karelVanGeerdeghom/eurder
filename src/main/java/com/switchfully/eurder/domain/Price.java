@@ -3,8 +3,8 @@ package com.switchfully.eurder.domain;
 import java.util.Objects;
 
 public class Price {
-    private double amount;
-    private Currency currency;
+    private final double amount;
+    private final Currency currency;
 
     public Price(double amount, Currency currency) {
         this.amount = amount;

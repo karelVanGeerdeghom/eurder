@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class OrderRepositoryTest {
-    private OrderRepository orderRepository = new OrderRepository();
+    private final OrderRepository orderRepository = new OrderRepository();
 
     @BeforeEach
     void truncate() {

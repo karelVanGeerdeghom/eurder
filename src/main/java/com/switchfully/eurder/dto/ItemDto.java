@@ -5,11 +5,11 @@ import com.switchfully.eurder.domain.Price;
 import java.util.Objects;
 
 public class ItemDto {
-    private Integer id;
-    private String name;
-    private String description;
-    private Price price;
-    private Integer amountInStock;
+    private final Integer id;
+    private final String name;
+    private final String description;
+    private final Price price;
+    private final Integer amountInStock;
 
     public ItemDto(Integer id, String name, String description, Price price, Integer amountInStock) {
         this.id = id;
@@ -24,7 +24,7 @@ public class ItemDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ItemDto itemDto = (ItemDto) o;
-        return amountInStock == itemDto.amountInStock && Objects.equals(id, itemDto.id) && Objects.equals(name, itemDto.name) && Objects.equals(description, itemDto.description) && Objects.equals(price, itemDto.price);
+        return amountInStock.equals(itemDto.amountInStock) && Objects.equals(id, itemDto.id) && Objects.equals(name, itemDto.name) && Objects.equals(description, itemDto.description) && Objects.equals(price, itemDto.price);
     }
 
     @Override

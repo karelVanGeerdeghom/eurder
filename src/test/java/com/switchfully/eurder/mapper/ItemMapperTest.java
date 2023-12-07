@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ItemMapperTest {
-    private ItemMapper itemMapper = new ItemMapper();
+    private final ItemMapper itemMapper = new ItemMapper();
 
     @Test
     void givenItem_whenMapItemToItemDto_thenGetItemDto() {

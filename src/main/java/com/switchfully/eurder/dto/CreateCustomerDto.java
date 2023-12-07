@@ -6,17 +6,17 @@ import jakarta.validation.constraints.NotBlank;
 public class CreateCustomerDto {
     @NotBlank
     @Email
-    private String email;
+    private final String email;
     @NotBlank
     private String password;
     @NotBlank
-    private String firstName;
+    private final String firstName;
     @NotBlank
-    private String lastName;
+    private final String lastName;
     @NotBlank
-    private String phoneNumber;
+    private final String phoneNumber;
     @NotBlank
-    private String address;
+    private final String address;
 
     public CreateCustomerDto(String email, String password, String firstName, String lastName, String phoneNumber, String address) {
         this.email = email;

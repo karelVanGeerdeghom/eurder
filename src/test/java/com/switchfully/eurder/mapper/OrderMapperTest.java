@@ -12,7 +12,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class OrderMapperTest {
-    private OrderMapper orderMapper = new OrderMapper(new OrderLineMapper());
+    private final OrderMapper orderMapper = new OrderMapper(new OrderLineMapper());
 
     @Test
     void givenOrder_whenMapOrderToOrderDto_thenGetOrderDto() {

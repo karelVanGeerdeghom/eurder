@@ -6,13 +6,13 @@ import jakarta.validation.constraints.NotNull;
 
 public class UpdateItemDto {
     @NotBlank
-    private String name;
+    private final String name;
     @NotBlank
-    private String description;
+    private final String description;
     @NotNull
-    private Price price;
+    private final Price price;
     @NotNull
-    private Integer amountInStock;
+    private final Integer amountInStock;
 
     public UpdateItemDto(String name, String description, Price price, Integer amountInStock) {
         this.name = name;

@@ -18,9 +18,9 @@ import java.util.List;
 @Validated
 @RequestMapping(path = "/orders")
 public class OrderController {
-    private AdminService adminService;
-    private CustomerService customerService;
-    private OrderService orderService;
+    private final AdminService adminService;
+    private final CustomerService customerService;
+    private final OrderService orderService;
 
     public OrderController(AdminService adminService, CustomerService customerService, OrderService orderService) {
         this.adminService = adminService;

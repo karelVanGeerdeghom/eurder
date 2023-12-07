@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
-    private ItemMapper itemMapper;
-    private ItemRepository itemRepository;
+    private final ItemMapper itemMapper;
+    private final ItemRepository itemRepository;
 
     public ItemService(ItemMapper itemMapper, ItemRepository itemRepository) {
         this.itemMapper = itemMapper;
@@ -29,33 +29,30 @@ public class ItemService {
 
     public ItemDto createItem(CreateItemDto createItemDto) {
         Item item = itemRepository.create(itemMapper.createItemDtoToItem(createItemDto));
-        ItemDto itemDto = itemMapper.itemToItemDto(item);
 
-        return itemDto;
+        return itemMapper.itemToItemDto(item);
     }
 
     public ItemDto updateItem(Integer id, UpdateItemDto updateItemDto) throws UnknownItemIdException {
         Item item = itemRepository.save(itemMapper.updateItemDtoToItem(itemRepository.getById(id), updateItemDto));
-        ItemDto itemDto = itemMapper.itemToItemDto(item);
 
-        return itemDto;
+        return itemMapper.itemToItemDto(item);
     }
 
     public ItemDto getById(Integer id) throws UnknownItemIdException {
         Item item = itemRepository.getById(id);
-        ItemDto itemDto = itemMapper.itemToItemDto(item);
 
-        return itemDto;
+        return itemMapper.itemToItemDto(item);
     }
 
     public List<ItemDto> getAllItems() {
-        return itemRepository.getAllItems().stream().map(item -> itemMapper.itemToItemDto(item)).collect(Collectors.toList());
+        return itemRepository.getAllItems().stream().map(itemMapper::itemToItemDto).collect(Collectors.toList());
     }
 
     public List<ItemStockIndicatorDto> getAllItemStockIndicators(StockIndicator stockIndicator) {
         return itemRepository.getAllItems().stream()
                 .sorted(Comparator.comparing(Item::getAmountInStock))
-                .map(item -> itemMapper.itemToItemStockIndicatorDto(item))
+                .map(itemMapper::itemToItemStockIndicatorDto)
                 .filter(itemStockIndicator -> stockIndicator == null || itemStockIndicator.getStockIndicator() == stockIndicator)
                 .collect(Collectors.toList());
     }

@@ -6,11 +6,11 @@ import com.switchfully.eurder.domain.Price;
 import java.time.LocalDate;
 
 public class OrderLineDto {
-    private Integer itemId;
-    private String itemName;
-    private Price itemPrice;
-    private Integer amountInOrder;
-    private LocalDate shippingDate;
+    private final Integer itemId;
+    private final String itemName;
+    private final Price itemPrice;
+    private final Integer amountInOrder;
+    private final LocalDate shippingDate;
 
     public OrderLineDto(Integer itemId, String itemName, Price itemPrice, Integer amountInOrder, LocalDate shippingDate) {
         this.itemId = itemId;

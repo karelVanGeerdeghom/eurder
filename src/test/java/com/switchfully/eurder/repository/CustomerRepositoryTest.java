@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CustomerRepositoryTest {
-    private CustomerRepository customerRepository = new CustomerRepository();
+    private final CustomerRepository customerRepository = new CustomerRepository();
 
     @BeforeEach
     void truncate() {

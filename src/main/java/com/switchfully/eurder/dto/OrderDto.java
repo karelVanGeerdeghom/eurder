@@ -7,11 +7,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class OrderDto {
-    private Integer id;
-    private Integer customerId;
-    private String customerAddress;
-    private List<OrderLineDto> orderLineDtos;
-    private LocalDate orderDate;
+    private final Integer id;
+    private final Integer customerId;
+    private final String customerAddress;
+    private final List<OrderLineDto> orderLineDtos;
+    private final LocalDate orderDate;
 
     public OrderDto(Integer id, Integer customerId, String customerAddress, List<OrderLineDto> orderLineDtos, LocalDate orderDate) {
         this.id = id;
