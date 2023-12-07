@@ -3,8 +3,10 @@ package com.switchfully.eurder.service;
 import com.switchfully.eurder.domain.Currency;
 import com.switchfully.eurder.domain.Item;
 import com.switchfully.eurder.domain.Price;
+import com.switchfully.eurder.domain.StockIndicator;
 import com.switchfully.eurder.dto.CreateItemDto;
 import com.switchfully.eurder.dto.ItemDto;
+import com.switchfully.eurder.dto.ItemStockIndicatorDto;
 import com.switchfully.eurder.dto.UpdateItemDto;
 import com.switchfully.eurder.exception.UnknownItemIdException;
 import com.switchfully.eurder.mapper.ItemMapper;
@@ -12,6 +14,7 @@ import com.switchfully.eurder.repository.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -107,5 +110,89 @@ class ItemServiceTest {
 
         // THEN
         assertThat(actual).containsExactly(itemMapper.itemToItemDto(item));
+    }
+
+    @Test
+    void givenMultipleItems_whenGetAllItemStockIndicators_thenGetAllItemStockIndicatorsSortedByStockIndicator() {
+        // GIVEN
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 15));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 8));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 6));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 4));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 2));
+
+        // WHEN
+        List<ItemStockIndicatorDto> actual = itemService.getAllItemStockIndicators(null);
+        List<ItemStockIndicatorDto> expected = new ArrayList<>(){{
+            add(new ItemStockIndicatorDto(6, "name", StockIndicator.STOCK_LOW));
+            add(new ItemStockIndicatorDto(5, "name", StockIndicator.STOCK_LOW));
+            add(new ItemStockIndicatorDto(4, "name", StockIndicator.STOCK_MEDIUM));
+            add(new ItemStockIndicatorDto(3, "name", StockIndicator.STOCK_MEDIUM));
+            add(new ItemStockIndicatorDto(1, "name", StockIndicator.STOCK_HIGH));
+            add(new ItemStockIndicatorDto(2, "name", StockIndicator.STOCK_HIGH));
+        }};
+
+        // THEN
+        assertThat(actual).containsSequence(expected);
+    }
+
+    @Test
+    void givenMultipleItems_whenGetAllItemStockIndicatorsWithLowStock_thenGetAllItemStockIndicatorsSortedByStockIndicatorWithLowStock() {
+        // GIVEN
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 15));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 8));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 6));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 4));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 2));
+
+        // WHEN
+        List<ItemStockIndicatorDto> actual = itemService.getAllItemStockIndicators(StockIndicator.STOCK_LOW);
+        List<ItemStockIndicatorDto> expected = new ArrayList<>(){{
+            add(new ItemStockIndicatorDto(6, "name", StockIndicator.STOCK_LOW));
+            add(new ItemStockIndicatorDto(5, "name", StockIndicator.STOCK_LOW));
+        }};
+
+        // THEN
+        assertThat(actual).containsSequence(expected);
+    }
+
+    @Test
+    void givenMultipleItems_whenGetAllItemStockIndicatorsWithMediumStock_thenGetAllItemStockIndicatorsSortedByStockIndicatorWithMediumStock() {
+        // GIVEN
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 15));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 8));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 6));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 4));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 2));
+
+        // WHEN
+        List<ItemStockIndicatorDto> actual = itemService.getAllItemStockIndicators(StockIndicator.STOCK_MEDIUM);
+        List<ItemStockIndicatorDto> expected = new ArrayList<>(){{
+            add(new ItemStockIndicatorDto(4, "name", StockIndicator.STOCK_MEDIUM));
+            add(new ItemStockIndicatorDto(3, "name", StockIndicator.STOCK_MEDIUM));
+        }};
+
+        // THEN
+        assertThat(actual).containsSequence(expected);
+    }
+
+    @Test
+    void givenMultipleItems_whenGetAllItemStockIndicatorsWithHighStock_thenGetAllItemStockIndicatorsSortedByStockIndicatorWithHighStock() {
+        // GIVEN
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 15));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 8));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 6));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 4));
+        itemService.createItem(new CreateItemDto("name", "description", new Price(10.0, Currency.EUR), 2));
+
+        // WHEN
+        List<ItemStockIndicatorDto> actual = itemService.getAllItemStockIndicators(StockIndicator.STOCK_HIGH);
+        List<ItemStockIndicatorDto> expected = new ArrayList<>(){{
+            add(new ItemStockIndicatorDto(1, "name", StockIndicator.STOCK_HIGH));
+            add(new ItemStockIndicatorDto(2, "name", StockIndicator.STOCK_HIGH));
+        }};
+
+        // THEN
+        assertThat(actual).containsSequence(expected);
     }
 }

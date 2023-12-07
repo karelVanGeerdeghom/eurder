@@ -1,7 +1,9 @@
 package com.switchfully.eurder.controller;
 
+import com.switchfully.eurder.domain.StockIndicator;
 import com.switchfully.eurder.dto.CreateItemDto;
 import com.switchfully.eurder.dto.ItemDto;
+import com.switchfully.eurder.dto.ItemStockIndicatorDto;
 import com.switchfully.eurder.dto.UpdateItemDto;
 import com.switchfully.eurder.service.AdminService;
 import com.switchfully.eurder.service.ItemService;
@@ -43,7 +45,14 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getItems() {
+    public List<ItemDto> getAllItems() {
         return itemService.getAllItems();
+    }
+
+    @GetMapping("/stock")
+    public List<ItemStockIndicatorDto> getAllItemStockIndicators(@RequestHeader String email, @RequestHeader String password, @RequestParam(required = false) StockIndicator stockIndicator) {
+        adminService.authenticate(email, password);
+
+        return itemService.getAllItemStockIndicators(stockIndicator);
     }
 }

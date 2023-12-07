@@ -1,14 +1,17 @@
 package com.switchfully.eurder.service;
 
 import com.switchfully.eurder.domain.Item;
+import com.switchfully.eurder.domain.StockIndicator;
 import com.switchfully.eurder.dto.CreateItemDto;
 import com.switchfully.eurder.dto.ItemDto;
+import com.switchfully.eurder.dto.ItemStockIndicatorDto;
 import com.switchfully.eurder.dto.UpdateItemDto;
 import com.switchfully.eurder.exception.UnknownItemIdException;
 import com.switchfully.eurder.mapper.ItemMapper;
 import com.switchfully.eurder.repository.ItemRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,5 +50,13 @@ public class ItemService {
 
     public List<ItemDto> getAllItems() {
         return itemRepository.getAllItems().stream().map(item -> itemMapper.itemToItemDto(item)).collect(Collectors.toList());
+    }
+
+    public List<ItemStockIndicatorDto> getAllItemStockIndicators(StockIndicator stockIndicator) {
+        return itemRepository.getAllItems().stream()
+                .sorted(Comparator.comparing(Item::getAmountInStock))
+                .map(item -> itemMapper.itemToItemStockIndicatorDto(item))
+                .filter(itemStockIndicator -> stockIndicator == null || itemStockIndicator.getStockIndicator() == stockIndicator)
+                .collect(Collectors.toList());
     }
 }
