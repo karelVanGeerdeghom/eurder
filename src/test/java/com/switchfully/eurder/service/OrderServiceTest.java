@@ -6,6 +6,7 @@ import com.switchfully.eurder.dto.CreateOrderLineDto;
 import com.switchfully.eurder.dto.OrderDto;
 import com.switchfully.eurder.exception.InvalidAmountInOrderInOrderLineException;
 import com.switchfully.eurder.exception.NoOrderLinesException;
+import com.switchfully.eurder.exception.OrderIsNotForCustomerException;
 import com.switchfully.eurder.exception.UnknownItemIdException;
 import com.switchfully.eurder.mapper.OrderLineMapper;
 import com.switchfully.eurder.mapper.OrderMapper;
@@ -22,7 +23,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class OrderServiceTest {
-    private Customer customer;
+    private Customer customerOne;
+    private Customer customerTwo;
     private Item itemOne;
     private Item itemTwo;
     private ItemRepository itemRepository;
@@ -33,8 +35,11 @@ class OrderServiceTest {
 
     @BeforeEach
     public void setup() {
-        customer = new Customer("email", "password", "firstName", "lastName", "phoneNumber", "address");
-        customer.setId(1);
+        customerOne = new Customer("customer.one@mail.com", "password", "firstName", "lastName", "phoneNumber", "address");
+        customerOne.setId(1);
+
+        customerTwo = new Customer("customer.two@mail.com", "password", "firstName", "lastName", "phoneNumber", "address");
+        customerTwo.setId(2);
 
         itemOne = new Item("name", "description", new Price(10.0, Currency.EUR), 10);
         itemTwo = new Item("name", "description", new Price(10.0, Currency.EUR), 10);
@@ -48,6 +53,7 @@ class OrderServiceTest {
         orderMapper = new OrderMapper(orderLineMapper);
 
         orderRepository = new OrderRepository();
+        orderRepository.truncate();
 
         orderService = new OrderService(itemRepository, orderMapper, orderLineMapper, orderRepository);
     }
@@ -73,7 +79,7 @@ class OrderServiceTest {
         CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos, orderDate);
 
         // WHEN
-        OrderDto actual = orderService.placeOrder(customer, createOrderDto);
+        OrderDto actual = orderService.placeOrder(customerOne, createOrderDto);
 
         // THEN
         assertThat(actual).isInstanceOf(OrderDto.class);
@@ -91,7 +97,7 @@ class OrderServiceTest {
         CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos, orderDate);
 
         // WHEN + THEN
-        assertThatThrownBy(() -> orderService.placeOrder(customer, createOrderDto)).isInstanceOf(NoOrderLinesException.class);
+        assertThatThrownBy(() -> orderService.placeOrder(customerOne, createOrderDto)).isInstanceOf(NoOrderLinesException.class);
     }
 
     @Test
@@ -104,7 +110,7 @@ class OrderServiceTest {
         CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos, orderDate);
 
         // WHEN + THEN
-        assertThatThrownBy(() -> orderService.placeOrder(customer, createOrderDto)).isInstanceOf(InvalidAmountInOrderInOrderLineException.class);
+        assertThatThrownBy(() -> orderService.placeOrder(customerOne, createOrderDto)).isInstanceOf(InvalidAmountInOrderInOrderLineException.class);
     }
 
     @Test
@@ -117,7 +123,7 @@ class OrderServiceTest {
         CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos, orderDate);
 
         // WHEN + THEN
-        assertThatThrownBy(() -> orderService.placeOrder(customer, createOrderDto)).isInstanceOf(UnknownItemIdException.class);
+        assertThatThrownBy(() -> orderService.placeOrder(customerOne, createOrderDto)).isInstanceOf(UnknownItemIdException.class);
     }
 
     @Test
@@ -130,7 +136,7 @@ class OrderServiceTest {
         CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos, orderDate);
 
         // WHEN
-        OrderDto actual = orderService.placeOrder(customer, createOrderDto);
+        OrderDto actual = orderService.placeOrder(customerOne, createOrderDto);
 
         // THEN
         assertThat(actual.getOrderLineDtos().getFirst().getShippingDate()).isEqualTo(LocalDate.now().plusDays(OrderService.SHIPPING_DAYS_IN_STOCK));
@@ -146,25 +152,25 @@ class OrderServiceTest {
         CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos, orderDate);
 
         // WHEN
-        OrderDto actual = orderService.placeOrder(customer, createOrderDto);
+        OrderDto actual = orderService.placeOrder(customerOne, createOrderDto);
 
         // THEN
         assertThat(actual.getOrderLineDtos().getFirst().getShippingDate()).isEqualTo(LocalDate.now().plusDays(OrderService.SHIPPING_DAYS_NOT_IN_STOCK));
     }
 
     @Test
-    void givenCustomerAndMultipleOrders_whenGetOrders_thenGetOrderDtos() {
+    void givenCustomerAndMultipleOrders_whenGetAllOrdersByCustomer_thenGetCustomerOrderDtos() {
         // GIVEN
         LocalDate orderDate = LocalDate.now();
-        orderService.placeOrder(customer, new CreateOrderDto(new ArrayList<>(){{
+        orderService.placeOrder(customerOne, new CreateOrderDto(new ArrayList<>(){{
             add(new CreateOrderLineDto(itemOne.getId(), 1));
         }}, orderDate));
-        orderService.placeOrder(customer, new CreateOrderDto(new ArrayList<>(){{
+        orderService.placeOrder(customerOne, new CreateOrderDto(new ArrayList<>(){{
             add(new CreateOrderLineDto(itemTwo.getId(), 1));
         }}, orderDate));
 
         // WHEN
-        List<OrderDto> actual = orderService.getAllOrdersByCustomer(customer);
+        List<OrderDto> actual = orderService.getAllOrdersByCustomer(customerOne);
 
         // THEN
         assertThat(actual).hasSize(2);
@@ -172,20 +178,57 @@ class OrderServiceTest {
     }
 
     @Test
-    void givenCustomerAndMultipleOrdersShippingToday_whenGetAllOrdersShippingToday_thenGetAllOrderDtosShippingToday() {
+    void givenMultipleCustomersAndMultipleOrdersShippingToday_whenGetAllOrdersShippingToday_thenGetAllOrderDtosShippingToday() {
         // GIVEN
         LocalDate orderDate = LocalDate.now().minusDays(1);
-        orderService.placeOrder(customer, new CreateOrderDto(new ArrayList<>(){{
+        orderService.placeOrder(customerOne, new CreateOrderDto(new ArrayList<>(){{
             add(new CreateOrderLineDto(itemOne.getId(), 1));
+            add(new CreateOrderLineDto(itemTwo.getId(), 20));
         }}, orderDate));
-        orderService.placeOrder(customer, new CreateOrderDto(new ArrayList<>(){{
-            add(new CreateOrderLineDto(itemTwo.getId(), 1));
+        orderService.placeOrder(customerTwo, new CreateOrderDto(new ArrayList<>(){{
+            add(new CreateOrderLineDto(itemOne.getId(), 1));
+            add(new CreateOrderLineDto(itemTwo.getId(), 20));
         }}, orderDate));
 
         // WHEN
         List<OrderDto> actual = orderService.getAllOrdersShippingToday();
+
         // THEN
         assertThat(actual).hasSize(2);
         assertThat(actual).allSatisfy(orderDto -> assertThat(orderDto).isInstanceOf(OrderDto.class));
+        assertThat(actual).allSatisfy(orderDto -> assertThat(orderDto.getOrderLineDtos()).hasSize(1));
+    }
+
+    @Test
+    void givenMultipleCustomersAndMultipleOrders_whenGetOrderByIdForCustomer_thenGetOrderDtoWithGivenId() {
+        // GIVEN
+        LocalDate orderDate = LocalDate.now().minusDays(1);
+        orderService.placeOrder(customerOne, new CreateOrderDto(new ArrayList<>(){{
+            add(new CreateOrderLineDto(itemOne.getId(), 1));
+        }}, orderDate));
+        orderService.placeOrder(customerTwo, new CreateOrderDto(new ArrayList<>(){{
+            add(new CreateOrderLineDto(itemTwo.getId(), 1));
+        }}, orderDate));
+
+        // WHEN
+        OrderDto actual = orderService.getOrderByIdForCustomer(customerOne, 1);
+
+        // THEN
+        assertThat(actual).isInstanceOf(OrderDto.class);
+    }
+
+    @Test
+    void givenMultipleCustomersAndMultipleOrders_whenGetOrderByIdForAnotherCustomer_thenThrowOrderIsNotForCustomerException() {
+        // GIVEN
+        LocalDate orderDate = LocalDate.now().minusDays(1);
+        orderService.placeOrder(customerOne, new CreateOrderDto(new ArrayList<>(){{
+            add(new CreateOrderLineDto(itemOne.getId(), 1));
+        }}, orderDate));
+        orderService.placeOrder(customerTwo, new CreateOrderDto(new ArrayList<>(){{
+            add(new CreateOrderLineDto(itemTwo.getId(), 1));
+        }}, orderDate));
+
+        // WHEN + THEN
+        assertThatThrownBy(() -> orderService.getOrderByIdForCustomer(customerOne, 2)).isInstanceOf(OrderIsNotForCustomerException.class);
     }
 }

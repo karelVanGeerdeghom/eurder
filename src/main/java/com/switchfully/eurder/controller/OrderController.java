@@ -33,6 +33,13 @@ public class OrderController {
         return orderService.placeOrder(customer, createOrderDto);
     }
 
+    @GetMapping("/{id}")
+    public OrderDto getOrder(@RequestHeader String email, @RequestHeader String password, @PathVariable Integer id) {
+        Customer customer = customerService.authenticate(email, password);
+
+        return orderService.getOrderByIdForCustomer(customer, id);
+    }
+
     @GetMapping
     public List<OrderDto> getAllOrdersByCustomer(@RequestHeader String email, @RequestHeader String password) {
         Customer customer = customerService.authenticate(email, password);

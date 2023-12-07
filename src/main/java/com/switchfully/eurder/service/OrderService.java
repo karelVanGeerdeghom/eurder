@@ -7,9 +7,7 @@ import com.switchfully.eurder.domain.OrderLine;
 import com.switchfully.eurder.dto.CreateOrderDto;
 import com.switchfully.eurder.dto.CreateOrderLineDto;
 import com.switchfully.eurder.dto.OrderDto;
-import com.switchfully.eurder.exception.InvalidAmountInOrderInOrderLineException;
-import com.switchfully.eurder.exception.NoOrderLinesException;
-import com.switchfully.eurder.exception.UnknownItemIdException;
+import com.switchfully.eurder.exception.*;
 import com.switchfully.eurder.mapper.OrderLineMapper;
 import com.switchfully.eurder.mapper.OrderMapper;
 import com.switchfully.eurder.repository.ItemRepository;
@@ -87,8 +85,19 @@ public class OrderService {
         });
     }
 
+
+
     public List<OrderDto> getAllOrdersByCustomer(Customer customer) {
         return orderRepository.getAllOrdersByCustomer(customer).stream().map(order -> orderMapper.orderToOrderDto(order)).collect(Collectors.toList());
+    }
+
+    public OrderDto getOrderByIdForCustomer(Customer customer, Integer id) throws UnknownOrderIdException, OrderIsNotForCustomerException {
+        Order order = orderRepository.getById(id);
+        if (!order.getCustomerId().equals(customer.getId())) {
+            throw new OrderIsNotForCustomerException();
+        }
+
+        return orderMapper.orderToOrderDto(order);
     }
 
     public List<OrderDto> getAllOrdersShippingToday() {

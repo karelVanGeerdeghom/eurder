@@ -36,7 +36,7 @@ public class OrderRepository {
         orders = new HashMap<>();
     }
 
-    public Order getById(Integer id) {
+    public Order getById(Integer id) throws UnknownOrderIdException {
         return orders.values().stream().filter(order -> order.getId().equals(id)).findFirst().orElseThrow(UnknownOrderIdException::new);
     }
 
