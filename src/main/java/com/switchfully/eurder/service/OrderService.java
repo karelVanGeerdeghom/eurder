@@ -96,10 +96,6 @@ public class OrderService {
 
 
 
-    public List<OrderDto> getAllOrdersForCustomer(Customer customer) {
-        return orderRepository.getAllOrdersByCustomer(customer).stream().map(orderMapper::orderToOrderDto).collect(Collectors.toList());
-    }
-
     public void validateOrderByIdForCustomer(Customer customer, Integer id) throws UnknownOrderIdException, OrderIsNotForCustomerException {
         Order order = orderRepository.getById(id);
         if (!order.getCustomerId().equals(customer.getId())) {
@@ -109,6 +105,10 @@ public class OrderService {
 
     public OrderDto getById(Integer id) {
         return orderMapper.orderToOrderDto(orderRepository.getById(id));
+    }
+
+    public List<OrderDto> getAllOrdersForCustomer(Customer customer) {
+        return orderRepository.getAllOrdersByCustomer(customer).stream().map(orderMapper::orderToOrderDto).collect(Collectors.toList());
     }
 
     public List<OrderDto> getAllOrdersShippingOnDate(LocalDate shippingDate) {
