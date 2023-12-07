@@ -1,11 +1,13 @@
 package com.switchfully.eurder.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class CreateOrderDto {
+    @Valid
     private List<CreateOrderLineDto> createOrderLineDtos;
     @NotNull
     private LocalDate orderDate;

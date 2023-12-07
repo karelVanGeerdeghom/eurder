@@ -2,6 +2,7 @@ package com.switchfully.eurder.controller;
 
 import com.switchfully.eurder.domain.Customer;
 import com.switchfully.eurder.dto.CreateOrderDto;
+import com.switchfully.eurder.dto.DuplicateOrderDto;
 import com.switchfully.eurder.dto.OrderDto;
 import com.switchfully.eurder.service.AdminService;
 import com.switchfully.eurder.service.CustomerService;
@@ -34,12 +35,13 @@ public class OrderController {
         return orderService.placeOrder(customer, createOrderDto);
     }
 
-//    @PostMapping("/{id}")
-//    public OrderDto duplicateOrder(@RequestHeader String email, @RequestHeader String password, @PathVariable Integer id) {
-//        Customer customer = customerService.authenticate(email, password);
-//
-//        return orderService.duplicateOrder(customer, id);
-//    }
+    @PostMapping("/{id}")
+    public OrderDto duplicateOrder(@RequestHeader String email, @RequestHeader String password, @PathVariable Integer id, @Valid @RequestBody DuplicateOrderDto duplicateOrderDto) {
+        Customer customer = customerService.authenticate(email, password);
+        orderService.validateOrderByIdForCustomer(customer, id);
+
+        return orderService.duplicateOrder(customer, id, duplicateOrderDto);
+    }
 
     @GetMapping("/{id}")
     public OrderDto getOrderByIdForCustomer(@RequestHeader String email, @RequestHeader String password, @PathVariable Integer id) {

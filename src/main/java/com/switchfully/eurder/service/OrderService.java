@@ -6,6 +6,7 @@ import com.switchfully.eurder.domain.Order;
 import com.switchfully.eurder.domain.OrderLine;
 import com.switchfully.eurder.dto.CreateOrderDto;
 import com.switchfully.eurder.dto.CreateOrderLineDto;
+import com.switchfully.eurder.dto.DuplicateOrderDto;
 import com.switchfully.eurder.dto.OrderDto;
 import com.switchfully.eurder.exception.*;
 import com.switchfully.eurder.mapper.OrderLineMapper;
@@ -41,6 +42,15 @@ public class OrderService {
         if (createOrderDto.getCreateOrderLineDtos().isEmpty()) {
             throw new NoOrderLinesException();
         }
+
+        Order order = createOrder(customer, createOrderDto);
+        updateStock(order);
+
+        return orderMapper.orderToOrderDto(order);
+    }
+
+    public OrderDto duplicateOrder(Customer customer, Integer id, DuplicateOrderDto duplicateOrderDto) {
+        CreateOrderDto createOrderDto = orderMapper.duplicateOrderToCreateOrderDto(orderRepository.getById(id), duplicateOrderDto);
 
         Order order = createOrder(customer, createOrderDto);
         updateStock(order);

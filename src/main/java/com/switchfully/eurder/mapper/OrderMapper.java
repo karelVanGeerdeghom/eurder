@@ -1,10 +1,10 @@
 package com.switchfully.eurder.mapper;
 
 import com.switchfully.eurder.domain.Order;
-import com.switchfully.eurder.dto.OrderDto;
-import com.switchfully.eurder.dto.OrderLineDto;
+import com.switchfully.eurder.dto.*;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Component
@@ -19,5 +19,11 @@ public class OrderMapper {
         List<OrderLineDto> orderLineDtos = order.getOrderLines().stream().map(orderLine -> orderLineMapper.orderLineToOrderLineDto(orderLine)).toList();
 
         return new OrderDto(order.getId(), order.getCustomerId(), order.getCustomerAddress(), orderLineDtos, order.getOrderDate());
+    }
+
+    public CreateOrderDto duplicateOrderToCreateOrderDto(Order order, DuplicateOrderDto duplicateOrderDto) {
+        List<CreateOrderLineDto> createOrderLineDtos = order.getOrderLines().stream().map(orderLine -> orderLineMapper.orderLineToCreateOrderLineDto(orderLine)).toList();
+
+        return new CreateOrderDto(createOrderLineDtos, duplicateOrderDto.getOrderDate());
     }
 }

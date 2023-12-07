@@ -1,6 +1,9 @@
 package com.switchfully.eurder.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 public class CreateOrderLineDto {
+    @NotNull
     private Integer itemId;
     private int amountInOrder;
 
