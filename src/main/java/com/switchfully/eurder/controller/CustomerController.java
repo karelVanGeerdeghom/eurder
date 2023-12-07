@@ -5,11 +5,13 @@ import com.switchfully.eurder.dto.CustomerDto;
 import com.switchfully.eurder.service.AdminService;
 import com.switchfully.eurder.service.CustomerService;
 import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@Validated
 @RequestMapping(path = "/customers")
 public class CustomerController {
     private final CustomerService customerService;

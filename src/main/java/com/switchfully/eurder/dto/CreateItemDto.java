@@ -1,10 +1,15 @@
 package com.switchfully.eurder.dto;
 
 import com.switchfully.eurder.domain.Price;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class CreateItemDto {
+    @NotBlank
     private String name;
+    @NotBlank
     private String description;
+    @NotNull
     private Price price;
     private int amountInStock;
 

@@ -6,9 +6,11 @@ import com.switchfully.eurder.dto.OrderDto;
 import com.switchfully.eurder.service.CustomerService;
 import com.switchfully.eurder.service.OrderService;
 import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Validated
 @RequestMapping(path = "/orders")
 public class OrderController {
     private CustomerService customerService;

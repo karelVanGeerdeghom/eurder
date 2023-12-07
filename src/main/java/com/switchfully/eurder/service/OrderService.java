@@ -7,6 +7,8 @@ import com.switchfully.eurder.domain.OrderLine;
 import com.switchfully.eurder.dto.CreateOrderDto;
 import com.switchfully.eurder.dto.CreateOrderLineDto;
 import com.switchfully.eurder.dto.OrderDto;
+import com.switchfully.eurder.exception.InvalidAmountInOrderInOrderLineException;
+import com.switchfully.eurder.exception.NoOrderLinesException;
 import com.switchfully.eurder.exception.UnknownItemIdException;
 import com.switchfully.eurder.mapper.OrderLineMapper;
 import com.switchfully.eurder.mapper.OrderMapper;
@@ -36,27 +38,35 @@ public class OrderService {
 
 
 
-    public OrderDto placeOrder(Customer customer, CreateOrderDto createOrderDto) throws UnknownItemIdException {
+    public OrderDto placeOrder(Customer customer, CreateOrderDto createOrderDto) throws NoOrderLinesException, InvalidAmountInOrderInOrderLineException, UnknownItemIdException {
+//        if (createOrderDto.getCreateOrderLineDtos().isEmpty()) {
+//            throw new NoOrderLinesException();
+//        }
+
         Order order = createOrder(customer, createOrderDto);
         updateStock(order);
 
         return orderMapper.orderToOrderDto(order);
     }
 
-    private Order createOrder(Customer customer, CreateOrderDto createOrderDto) throws UnknownItemIdException {
+    private Order createOrder(Customer customer, CreateOrderDto createOrderDto) throws InvalidAmountInOrderInOrderLineException, UnknownItemIdException {
         LocalDate orderDate = LocalDate.now();
         List<OrderLine> orderLines = createOrderLines(createOrderDto, orderDate);
 
         return orderRepository.create(new Order(customer.getId(), customer.getAddress(), orderLines, orderDate));
     }
 
-    private List<OrderLine> createOrderLines(CreateOrderDto createOrderDto, LocalDate orderDate) throws UnknownItemIdException {
+    private List<OrderLine> createOrderLines(CreateOrderDto createOrderDto, LocalDate orderDate) throws InvalidAmountInOrderInOrderLineException, UnknownItemIdException {
         return createOrderDto.getCreateOrderLineDtos().stream()
                 .map(createOrderLineDto -> createOrderLine(createOrderLineDto, orderDate))
                 .toList();
     }
 
-    private OrderLine createOrderLine(CreateOrderLineDto createOrderLineDto, LocalDate orderDate) throws UnknownItemIdException {
+    private OrderLine createOrderLine(CreateOrderLineDto createOrderLineDto, LocalDate orderDate) throws InvalidAmountInOrderInOrderLineException, UnknownItemIdException {
+//        if (createOrderLineDto.getAmountInOrder() < 1) {
+//            throw new InvalidAmountInOrderInOrderLineException();
+//        }
+
         Item item = itemRepository.getById(createOrderLineDto.getItemId());
         LocalDate shippingDate = getShippingDate(item, createOrderLineDto.getAmountInOrder(), orderDate);
         OrderLine orderLine = orderLineMapper.createOrderLineDtoToOrderLine(item, createOrderLineDto, shippingDate);

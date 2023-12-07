@@ -4,6 +4,8 @@ import com.switchfully.eurder.domain.*;
 import com.switchfully.eurder.dto.CreateOrderDto;
 import com.switchfully.eurder.dto.CreateOrderLineDto;
 import com.switchfully.eurder.dto.OrderDto;
+import com.switchfully.eurder.exception.InvalidAmountInOrderInOrderLineException;
+import com.switchfully.eurder.exception.NoOrderLinesException;
 import com.switchfully.eurder.exception.UnknownItemIdException;
 import com.switchfully.eurder.mapper.OrderLineMapper;
 import com.switchfully.eurder.mapper.OrderMapper;
@@ -76,6 +78,28 @@ class OrderServiceTest {
         assertThat(actual.getOrderLineDtos()).hasSize(2);
         assertThat(itemOne.getAmountInStock()).isEqualTo(9);
         assertThat(itemTwo.getAmountInStock()).isEqualTo(9);
+    }
+
+    @Test
+    void givenCustomerAndCreateOrderDtoWithoutCreateOrderLineDtos_whenPlaceOrder_thenThrowNoOrderLinesException() {
+        // GIVEN
+        List<CreateOrderLineDto> createOrderLineDtos = new ArrayList<>();
+        CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos);
+
+        // WHEN + THEN
+        assertThatThrownBy(() -> orderService.placeOrder(customer, createOrderDto)).isInstanceOf(NoOrderLinesException.class);
+    }
+
+    @Test
+    void givenCustomerAndCreateOrderDtoWithInvalidAmountInOrder_whenPlaceOrder_thenThrowInvalidAmountInOrderInOrderLineException() {
+        // GIVEN
+        List<CreateOrderLineDto> createOrderLineDtos = new ArrayList<>(){{
+            add(new CreateOrderLineDto(10, 0));
+        }};
+        CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos);
+
+        // WHEN + THEN
+        assertThatThrownBy(() -> orderService.placeOrder(customer, createOrderDto)).isInstanceOf(InvalidAmountInOrderInOrderLineException.class);
     }
 
     @Test

@@ -6,11 +6,13 @@ import com.switchfully.eurder.dto.UpdateItemDto;
 import com.switchfully.eurder.service.AdminService;
 import com.switchfully.eurder.service.ItemService;
 import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@Validated
 @RequestMapping(path = "/items")
 public class ItemController {
     private final AdminService adminService;
