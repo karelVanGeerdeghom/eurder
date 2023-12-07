@@ -48,17 +48,19 @@ class CustomerRepositoryTest {
     @Test
     void givenExistingId_whenGetCustomerById_thenGetCustomerWithGivenId() {
         // GIVEN
+        Integer id = 1;
+
         String email = "firstName.lastName@mail.com";
         String password = "password";
 
         customerRepository.create(new Customer(email, password, "firstName", "lastName", "phoneNumber", "address"));
 
         // WHEN
-        Customer actual = customerRepository.getById(1);
+        Customer actual = customerRepository.getById(id);
 
         // THEN
         assertThat(actual).isInstanceOf(Customer.class);
-        assertThat(actual.getId()).isEqualTo(1);
+        assertThat(actual.getId()).isEqualTo(id);
         assertThat(actual.getEmail()).isEqualTo(email);
         assertThat(actual.getPassword()).isEqualTo(password);
     }

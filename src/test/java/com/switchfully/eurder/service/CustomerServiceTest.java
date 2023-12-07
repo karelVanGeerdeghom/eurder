@@ -114,6 +114,7 @@ class CustomerServiceTest {
 
         // THEN
         assertThat(actual).isInstanceOf(CustomerDto.class);
+        assertThat(actual.getId()).isEqualTo(id);
     }
 
     @Test

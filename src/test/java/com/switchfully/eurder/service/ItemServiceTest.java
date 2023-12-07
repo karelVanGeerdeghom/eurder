@@ -88,6 +88,7 @@ class ItemServiceTest {
 
         // THEN
         assertThat(actual).isInstanceOf(ItemDto.class);
+        assertThat(actual.getId()).isEqualTo(id);
     }
 
     @Test

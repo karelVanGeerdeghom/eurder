@@ -38,17 +38,19 @@ class AdminRepositoryTest {
     @Test
     void givenExistingId_whenGetAdminById_thenGetAdminWithGivenId() {
         // GIVEN
+        Integer id = 1;
+
         String email = "firstName.lastName@mail.com";
         String password = "password";
 
         adminRepository.create(new Admin(email, password));
 
         // WHEN
-        Admin actual = adminRepository.getById(1);
+        Admin actual = adminRepository.getById(id);
 
         // THEN
         assertThat(actual).isInstanceOf(Admin.class);
-        assertThat(actual.getId()).isEqualTo(1);
+        assertThat(actual.getId()).isEqualTo(id);
         assertThat(actual.getEmail()).isEqualTo(email);
         assertThat(actual.getPassword()).isEqualTo(password);
     }

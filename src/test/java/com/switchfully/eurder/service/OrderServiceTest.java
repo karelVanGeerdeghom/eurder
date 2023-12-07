@@ -19,8 +19,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 class OrderServiceTest {
     private Customer customerOne;
@@ -159,7 +158,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void givenCustomerAndMultipleOrders_whenGetAllOrdersByCustomer_thenGetCustomerOrderDtos() {
+    void givenCustomerAndMultipleOrders_whenGetAllOrdersForCustomer_thenGetCustomerOrderDtos() {
         // GIVEN
         LocalDate orderDate = LocalDate.now();
         orderService.placeOrder(customerOne, new CreateOrderDto(new ArrayList<>(){{
@@ -170,7 +169,7 @@ class OrderServiceTest {
         }}, orderDate));
 
         // WHEN
-        List<OrderDto> actual = orderService.getAllOrdersByCustomer(customerOne);
+        List<OrderDto> actual = orderService.getAllOrdersForCustomer(customerOne);
 
         // THEN
         assertThat(actual).hasSize(2);
@@ -180,7 +179,7 @@ class OrderServiceTest {
     @Test
     void givenMultipleCustomersAndMultipleOrdersShippingToday_whenGetAllOrdersShippingToday_thenGetAllOrderDtosShippingToday() {
         // GIVEN
-        LocalDate orderDate = LocalDate.now().minusDays(1);
+        LocalDate orderDate = LocalDate.now();
         orderService.placeOrder(customerOne, new CreateOrderDto(new ArrayList<>(){{
             add(new CreateOrderLineDto(itemOne.getId(), 1));
             add(new CreateOrderLineDto(itemTwo.getId(), 20));
@@ -191,7 +190,7 @@ class OrderServiceTest {
         }}, orderDate));
 
         // WHEN
-        List<OrderDto> actual = orderService.getAllOrdersShippingToday();
+        List<OrderDto> actual = orderService.getAllOrdersShippingOnDate(orderDate.plusDays(1));
 
         // THEN
         assertThat(actual).hasSize(2);
@@ -200,25 +199,25 @@ class OrderServiceTest {
     }
 
     @Test
-    void givenMultipleCustomersAndMultipleOrders_whenGetOrderByIdForCustomer_thenGetOrderDtoWithGivenId() {
+    void givenExistingId_whenGetOrderById_thenGetOrderDtoWithGivenId() {
         // GIVEN
-        LocalDate orderDate = LocalDate.now().minusDays(1);
+        Integer id = 1;
+
+        LocalDate orderDate = LocalDate.now();
         orderService.placeOrder(customerOne, new CreateOrderDto(new ArrayList<>(){{
             add(new CreateOrderLineDto(itemOne.getId(), 1));
         }}, orderDate));
-        orderService.placeOrder(customerTwo, new CreateOrderDto(new ArrayList<>(){{
-            add(new CreateOrderLineDto(itemTwo.getId(), 1));
-        }}, orderDate));
 
         // WHEN
-        OrderDto actual = orderService.getOrderByIdForCustomer(customerOne, 1);
+        OrderDto actual = orderService.getById(id);
 
         // THEN
         assertThat(actual).isInstanceOf(OrderDto.class);
+        assertThat(actual.getId()).isEqualTo(id);
     }
 
     @Test
-    void givenMultipleCustomersAndMultipleOrders_whenGetOrderByIdForAnotherCustomer_thenThrowOrderIsNotForCustomerException() {
+    void givenMultipleCustomersAndMultipleOrders_whenValidateOrderByIdForCustomer_thenGetOrderDtoWithGivenId() {
         // GIVEN
         LocalDate orderDate = LocalDate.now().minusDays(1);
         orderService.placeOrder(customerOne, new CreateOrderDto(new ArrayList<>(){{
@@ -229,6 +228,21 @@ class OrderServiceTest {
         }}, orderDate));
 
         // WHEN + THEN
-        assertThatThrownBy(() -> orderService.getOrderByIdForCustomer(customerOne, 2)).isInstanceOf(OrderIsNotForCustomerException.class);
+        assertThatNoException().isThrownBy(() -> orderService.validateOrderByIdForCustomer(customerOne, 1));
+    }
+
+    @Test
+    void givenMultipleCustomersAndMultipleOrders_whenValidateOrderByIdForAnotherCustomer_thenThrowOrderIsNotForCustomerException() {
+        // GIVEN
+        LocalDate orderDate = LocalDate.now().minusDays(1);
+        orderService.placeOrder(customerOne, new CreateOrderDto(new ArrayList<>(){{
+            add(new CreateOrderLineDto(itemOne.getId(), 1));
+        }}, orderDate));
+        orderService.placeOrder(customerTwo, new CreateOrderDto(new ArrayList<>(){{
+            add(new CreateOrderLineDto(itemTwo.getId(), 1));
+        }}, orderDate));
+
+        // WHEN + THEN
+        assertThatThrownBy(() -> orderService.validateOrderByIdForCustomer(customerOne, 2)).isInstanceOf(OrderIsNotForCustomerException.class);
     }
 }

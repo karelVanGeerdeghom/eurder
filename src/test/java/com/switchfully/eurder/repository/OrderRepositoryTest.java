@@ -44,8 +44,10 @@ class OrderRepositoryTest {
     }
 
     @Test
-    void givenId_whenGetOrderById_thenGetOrderWithGivenId() {
+    void givenExistingId_whenGetOrderById_thenGetOrderWithGivenId() {
         // GIVEN
+        Integer id = 1;
+
         Integer customerId = 1;
         String customerAddress = "address";
         List<OrderLine> orderLines = new ArrayList<>();
@@ -53,11 +55,11 @@ class OrderRepositoryTest {
         orderRepository.create(new Order(customerId, customerAddress, orderLines, orderDate));
 
         // WHEN
-        Order actual = orderRepository.getById(1);
+        Order actual = orderRepository.getById(id);
 
         // THEN
         assertThat(actual).isInstanceOf(Order.class);
-        assertThat(actual.getId()).isEqualTo(1);
+        assertThat(actual.getId()).isEqualTo(id);
         assertThat(actual.getCustomerId()).isEqualTo(customerId);
         assertThat(actual.getCustomerAddress()).isEqualTo(customerAddress);
         assertThat(actual.getOrderLines()).isEqualTo(orderLines);

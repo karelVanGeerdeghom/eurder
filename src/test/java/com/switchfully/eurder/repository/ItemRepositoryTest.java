@@ -42,8 +42,10 @@ class ItemRepositoryTest {
     }
 
     @Test
-    void givenId_whenGetItemById_thenGetItemWithGivenId() {
+    void givenExistingId_whenGetItemById_thenGetItemWithGivenId() {
         // GIVEN
+        Integer id = 1;
+
         String name = "name";
         String description = "description";
         Price price = new Price(10.0, Currency.EUR);
@@ -51,11 +53,11 @@ class ItemRepositoryTest {
         itemRepository.create(new Item(name, description, price, amountInStock));
 
         // WHEN
-        Item actual = itemRepository.getById(1);
+        Item actual = itemRepository.getById(id);
 
         // THEN
         assertThat(actual).isInstanceOf(Item.class);
-        assertThat(actual.getId()).isEqualTo(1);
+        assertThat(actual.getId()).isEqualTo(id);
         assertThat(actual.getName()).isEqualTo(name);
         assertThat(actual.getDescription()).isEqualTo(description);
         assertThat(actual.getPrice()).isEqualTo(price);

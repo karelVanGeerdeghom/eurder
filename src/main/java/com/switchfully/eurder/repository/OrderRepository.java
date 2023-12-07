@@ -2,12 +2,10 @@ package com.switchfully.eurder.repository;
 
 import com.switchfully.eurder.domain.Customer;
 import com.switchfully.eurder.domain.Order;
-import com.switchfully.eurder.dto.OrderDto;
 import com.switchfully.eurder.exception.UnknownOrderIdException;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,10 +42,10 @@ public class OrderRepository {
         return orders.values().stream().filter(order -> order.getCustomerId().equals(customer.getId())).collect(Collectors.toList());
     }
 
-    public List<Order> getAllOrdersShippingToday() {
+    public List<Order> getAllOrdersShippingOnDate(LocalDate shippingDate) {
         return orders.values().stream()
                 .filter(order -> order.getOrderLines().stream()
-                        .anyMatch(orderLine -> orderLine.getShippingDate().isEqual(LocalDate.now())))
+                        .anyMatch(orderLine -> orderLine.getShippingDate().isEqual(shippingDate)))
                 .collect(Collectors.toList());
     }
 }

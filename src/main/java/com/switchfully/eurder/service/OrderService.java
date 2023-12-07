@@ -87,23 +87,25 @@ public class OrderService {
 
 
 
-    public List<OrderDto> getAllOrdersByCustomer(Customer customer) {
+    public List<OrderDto> getAllOrdersForCustomer(Customer customer) {
         return orderRepository.getAllOrdersByCustomer(customer).stream().map(order -> orderMapper.orderToOrderDto(order)).collect(Collectors.toList());
     }
 
-    public OrderDto getOrderByIdForCustomer(Customer customer, Integer id) throws UnknownOrderIdException, OrderIsNotForCustomerException {
+    public void validateOrderByIdForCustomer(Customer customer, Integer id) throws UnknownOrderIdException, OrderIsNotForCustomerException {
         Order order = orderRepository.getById(id);
         if (!order.getCustomerId().equals(customer.getId())) {
             throw new OrderIsNotForCustomerException();
         }
-
-        return orderMapper.orderToOrderDto(order);
     }
 
-    public List<OrderDto> getAllOrdersShippingToday() {
-        return orderRepository.getAllOrdersShippingToday().stream()
+    public OrderDto getById(Integer id) {
+        return orderMapper.orderToOrderDto(orderRepository.getById(id));
+    }
+
+    public List<OrderDto> getAllOrdersShippingOnDate(LocalDate shippingDate) {
+        return orderRepository.getAllOrdersShippingOnDate(shippingDate).stream()
                 .map(order -> orderMapper.orderToOrderDto(order))
-                .map(orderDto -> new OrderDto(orderDto.getId(), orderDto.getCustomerId(), orderDto.getCustomerAddress(), orderDto.getOrderLineDtos().stream().filter(orderLineDto -> orderLineDto.getShippingDate().equals(LocalDate.now())).collect(Collectors.toList()), orderDto.getOrderDate()))
+                .map(orderDto -> new OrderDto(orderDto.getId(), orderDto.getCustomerId(), orderDto.getCustomerAddress(), orderDto.getOrderLineDtos().stream().filter(orderLineDto -> orderLineDto.getShippingDate().equals(shippingDate)).collect(Collectors.toList()), orderDto.getOrderDate()))
                 .collect(Collectors.toList());
     }
 }

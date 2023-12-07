@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -33,24 +34,32 @@ public class OrderController {
         return orderService.placeOrder(customer, createOrderDto);
     }
 
-    @GetMapping("/{id}")
-    public OrderDto getOrder(@RequestHeader String email, @RequestHeader String password, @PathVariable Integer id) {
-        Customer customer = customerService.authenticate(email, password);
+//    @PostMapping("/{id}")
+//    public OrderDto duplicateOrder(@RequestHeader String email, @RequestHeader String password, @PathVariable Integer id) {
+//        Customer customer = customerService.authenticate(email, password);
+//
+//        return orderService.duplicateOrder(customer, id);
+//    }
 
-        return orderService.getOrderByIdForCustomer(customer, id);
+    @GetMapping("/{id}")
+    public OrderDto getOrderByIdForCustomer(@RequestHeader String email, @RequestHeader String password, @PathVariable Integer id) {
+        Customer customer = customerService.authenticate(email, password);
+        orderService.validateOrderByIdForCustomer(customer, id);
+
+        return orderService.getById(id);
     }
 
     @GetMapping
-    public List<OrderDto> getAllOrdersByCustomer(@RequestHeader String email, @RequestHeader String password) {
+    public List<OrderDto> getAllOrdersForCustomer(@RequestHeader String email, @RequestHeader String password) {
         Customer customer = customerService.authenticate(email, password);
 
-        return orderService.getAllOrdersByCustomer(customer);
+        return orderService.getAllOrdersForCustomer(customer);
     }
 
-    @GetMapping("/today")
-    public List<OrderDto> getAllOrdersShippingToday(@RequestHeader String email, @RequestHeader String password) {
+    @GetMapping("/shipping-date/{shippingDate}")
+    public List<OrderDto> getAllOrdersShippingOnDate(@RequestHeader String email, @RequestHeader String password, @PathVariable LocalDate shippingDate) {
         adminService.authenticate(email, password);
 
-        return orderService.getAllOrdersShippingToday();
+        return orderService.getAllOrdersShippingOnDate(shippingDate);
     }
 }
