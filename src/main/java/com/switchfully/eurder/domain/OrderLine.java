@@ -10,8 +10,6 @@ public class OrderLine {
     private LocalDate shippingDate;
 
     public OrderLine(Integer itemId, String itemName, Price itemPrice, int amountInOrder, LocalDate shippingDate) {
-        System.out.println(shippingDate);
-
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
