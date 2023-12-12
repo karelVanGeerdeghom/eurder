@@ -5,6 +5,7 @@ import com.switchfully.eurder.dto.CustomerDto;
 import com.switchfully.eurder.service.AdminService;
 import com.switchfully.eurder.service.CustomerService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,11 +24,13 @@ public class CustomerController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public CustomerDto createCustomer(@Valid @RequestBody CreateCustomerDto createCustomerDto) {
         return customerService.createCustomer(createCustomerDto);
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public CustomerDto getCustomer(@RequestHeader String email, @RequestHeader String password, @PathVariable Integer id) {
         adminService.authenticate(email, password);
 
@@ -35,7 +38,8 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<CustomerDto> getCustomers(@RequestHeader String email, @RequestHeader String password) {
+    @ResponseStatus(HttpStatus.OK)
+    public List<CustomerDto> getAllCustomers(@RequestHeader String email, @RequestHeader String password) {
         adminService.authenticate(email, password);
 
         return customerService.getAllCustomers();

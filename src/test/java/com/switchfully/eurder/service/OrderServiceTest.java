@@ -3,7 +3,7 @@ package com.switchfully.eurder.service;
 import com.switchfully.eurder.domain.*;
 import com.switchfully.eurder.dto.CreateOrderDto;
 import com.switchfully.eurder.dto.CreateOrderLineDto;
-import com.switchfully.eurder.dto.DuplicateOrderDto;
+import com.switchfully.eurder.dto.ReOrderDto;
 import com.switchfully.eurder.dto.OrderDto;
 import com.switchfully.eurder.exception.InvalidAmountInOrderInOrderLineException;
 import com.switchfully.eurder.exception.NoOrderLinesException;
@@ -100,10 +100,10 @@ class OrderServiceTest {
         CreateOrderDto createOrderDto = new CreateOrderDto(createOrderLineDtos, orderDate);
         OrderDto orderDto = orderService.placeOrder(customerOne, createOrderDto);
 
-        DuplicateOrderDto duplicateOrderDto = new DuplicateOrderDto(orderDate);
+        ReOrderDto reOrderDto = new ReOrderDto(orderDate);
 
         // WHEN
-        OrderDto actual = orderService.duplicateOrder(customerOne, orderDto.getId(), duplicateOrderDto);
+        OrderDto actual = orderService.reOrder(customerOne, orderDto.getId(), reOrderDto);
         // THEN
         assertThat(actual).isInstanceOf(OrderDto.class);
         assertThat(actual.getOrderLineDtos()).hasSize(2);

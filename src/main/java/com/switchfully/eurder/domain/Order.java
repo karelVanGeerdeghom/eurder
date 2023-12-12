@@ -40,4 +40,10 @@ public class Order {
     public LocalDate getOrderDate() {
         return orderDate;
     }
+
+    public Price calculateTotalPrice() {
+        double totalPriceAmount = orderLines.stream().reduce(0.0, (totalPrice, orderLine) -> totalPrice + orderLine.calculateTotalPrice().getAmount(), Double::sum);
+
+        return new Price(totalPriceAmount, Currency.EUR);
+    }
 }

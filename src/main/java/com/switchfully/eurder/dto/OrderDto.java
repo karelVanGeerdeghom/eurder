@@ -12,13 +12,15 @@ public class OrderDto {
     private final String customerAddress;
     private final List<OrderLineDto> orderLineDtos;
     private final LocalDate orderDate;
+    private final Price totalPrice;
 
-    public OrderDto(Integer id, Integer customerId, String customerAddress, List<OrderLineDto> orderLineDtos, LocalDate orderDate) {
+    public OrderDto(Integer id, Integer customerId, String customerAddress, List<OrderLineDto> orderLineDtos, LocalDate orderDate, Price totalPrice) {
         this.id = id;
         this.customerId = customerId;
         this.customerAddress = customerAddress;
         this.orderLineDtos = orderLineDtos;
         this.orderDate = orderDate;
+        this.totalPrice = totalPrice;
     }
 
     public Integer getId() {
@@ -42,8 +44,6 @@ public class OrderDto {
     }
 
     public Price getTotalPrice() {
-        double totalPriceAmount = orderLineDtos.stream().reduce(0.0, (totalPrice, orderLineDto) -> totalPrice + orderLineDto.getTotalPrice().getAmount(), Double::sum);
-
-        return new Price(totalPriceAmount, Currency.EUR);
+        return totalPrice;
     }
 }

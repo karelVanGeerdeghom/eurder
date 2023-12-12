@@ -11,13 +11,15 @@ public class OrderLineDto {
     private final Price itemPrice;
     private final Integer amountInOrder;
     private final LocalDate shippingDate;
+    private final Price totalPrice;
 
-    public OrderLineDto(Integer itemId, String itemName, Price itemPrice, Integer amountInOrder, LocalDate shippingDate) {
+    public OrderLineDto(Integer itemId, String itemName, Price itemPrice, Integer amountInOrder, LocalDate shippingDate, Price totalPrice) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.amountInOrder = amountInOrder;
         this.shippingDate = shippingDate;
+        this.totalPrice = totalPrice;
     }
 
     public Integer getItemId() {
@@ -41,6 +43,6 @@ public class OrderLineDto {
     }
 
     public Price getTotalPrice() {
-        return new Price(itemPrice.getAmount() * amountInOrder, Currency.EUR);
+        return totalPrice;
     }
 }

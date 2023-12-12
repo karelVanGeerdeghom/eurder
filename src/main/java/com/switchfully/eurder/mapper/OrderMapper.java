@@ -17,12 +17,12 @@ public class OrderMapper {
     public OrderDto orderToOrderDto(Order order) {
         List<OrderLineDto> orderLineDtos = order.getOrderLines().stream().map(orderLineMapper::orderLineToOrderLineDto).toList();
 
-        return new OrderDto(order.getId(), order.getCustomerId(), order.getCustomerAddress(), orderLineDtos, order.getOrderDate());
+        return new OrderDto(order.getId(), order.getCustomerId(), order.getCustomerAddress(), orderLineDtos, order.getOrderDate(), order.calculateTotalPrice());
     }
 
-    public CreateOrderDto duplicateOrderToCreateOrderDto(Order order, DuplicateOrderDto duplicateOrderDto) {
+    public CreateOrderDto reOrderDtoToCreateOrderDto(Order order, ReOrderDto reOrderDto) {
         List<CreateOrderLineDto> createOrderLineDtos = order.getOrderLines().stream().map(orderLineMapper::orderLineToCreateOrderLineDto).toList();
 
-        return new CreateOrderDto(createOrderLineDtos, duplicateOrderDto.getOrderDate());
+        return new CreateOrderDto(createOrderLineDtos, reOrderDto.getOrderDate());
     }
 }

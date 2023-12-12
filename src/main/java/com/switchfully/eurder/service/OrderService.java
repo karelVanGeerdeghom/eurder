@@ -6,7 +6,7 @@ import com.switchfully.eurder.domain.Order;
 import com.switchfully.eurder.domain.OrderLine;
 import com.switchfully.eurder.dto.CreateOrderDto;
 import com.switchfully.eurder.dto.CreateOrderLineDto;
-import com.switchfully.eurder.dto.DuplicateOrderDto;
+import com.switchfully.eurder.dto.ReOrderDto;
 import com.switchfully.eurder.dto.OrderDto;
 import com.switchfully.eurder.exception.*;
 import com.switchfully.eurder.mapper.OrderLineMapper;
@@ -49,8 +49,8 @@ public class OrderService {
         return orderMapper.orderToOrderDto(order);
     }
 
-    public OrderDto duplicateOrder(Customer customer, Integer id, DuplicateOrderDto duplicateOrderDto) throws NoOrderLinesException, InvalidAmountInOrderInOrderLineException, UnknownItemIdException {
-        CreateOrderDto createOrderDto = orderMapper.duplicateOrderToCreateOrderDto(orderRepository.getById(id), duplicateOrderDto);
+    public OrderDto reOrder(Customer customer, Integer id, ReOrderDto reOrderDto) throws NoOrderLinesException, InvalidAmountInOrderInOrderLineException, UnknownItemIdException {
+        CreateOrderDto createOrderDto = orderMapper.reOrderDtoToCreateOrderDto(orderRepository.getById(id), reOrderDto);
 
         Order order = createOrder(customer, createOrderDto);
         updateStock(order);
@@ -114,7 +114,16 @@ public class OrderService {
     public List<OrderDto> getAllOrdersShippingOnDate(LocalDate shippingDate) {
         return orderRepository.getAllOrdersShippingOnDate(shippingDate).stream()
                 .map(orderMapper::orderToOrderDto)
-                .map(orderDto -> new OrderDto(orderDto.getId(), orderDto.getCustomerId(), orderDto.getCustomerAddress(), orderDto.getOrderLineDtos().stream().filter(orderLineDto -> orderLineDto.getShippingDate().equals(shippingDate)).collect(Collectors.toList()), orderDto.getOrderDate()))
+                .map(orderDto -> new OrderDto(
+                        orderDto.getId(),
+                        orderDto.getCustomerId(),
+                        orderDto.getCustomerAddress(),
+                        orderDto.getOrderLineDtos().stream()
+                                .filter(orderLineDto -> orderLineDto.getShippingDate().equals(shippingDate))
+                                .collect(Collectors.toList()),
+                        orderDto.getOrderDate(),
+                        orderDto.getTotalPrice()
+                ))
                 .collect(Collectors.toList());
     }
 }

@@ -2,12 +2,13 @@ package com.switchfully.eurder.controller;
 
 import com.switchfully.eurder.domain.Customer;
 import com.switchfully.eurder.dto.CreateOrderDto;
-import com.switchfully.eurder.dto.DuplicateOrderDto;
+import com.switchfully.eurder.dto.ReOrderDto;
 import com.switchfully.eurder.dto.OrderDto;
 import com.switchfully.eurder.service.AdminService;
 import com.switchfully.eurder.service.CustomerService;
 import com.switchfully.eurder.service.OrderService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,18 +30,20 @@ public class OrderController {
     }
 
     @PostMapping
-    public OrderDto createOrder(@RequestHeader String email, @RequestHeader String password, @Valid @RequestBody CreateOrderDto createOrderDto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public OrderDto placeOrder(@RequestHeader String email, @RequestHeader String password, @Valid @RequestBody CreateOrderDto createOrderDto) {
         Customer customer = customerService.authenticate(email, password);
 
         return orderService.placeOrder(customer, createOrderDto);
     }
 
     @PostMapping("/{id}")
-    public OrderDto duplicateOrder(@RequestHeader String email, @RequestHeader String password, @PathVariable Integer id, @Valid @RequestBody DuplicateOrderDto duplicateOrderDto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public OrderDto reOrder(@RequestHeader String email, @RequestHeader String password, @PathVariable Integer id, @Valid @RequestBody ReOrderDto reOrderDto) {
         Customer customer = customerService.authenticate(email, password);
         orderService.validateOrderByIdForCustomer(customer, id);
 
-        return orderService.duplicateOrder(customer, id, duplicateOrderDto);
+        return orderService.reOrder(customer, id, reOrderDto);
     }
 
     @GetMapping("/{id}")

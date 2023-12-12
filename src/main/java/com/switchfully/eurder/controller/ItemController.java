@@ -8,6 +8,7 @@ import com.switchfully.eurder.dto.UpdateItemDto;
 import com.switchfully.eurder.service.AdminService;
 import com.switchfully.eurder.service.ItemService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class ItemController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ItemDto createItem(@RequestHeader String email, @RequestHeader String password, @Valid @RequestBody CreateItemDto createItemDto) {
         adminService.authenticate(email, password);
 
@@ -33,6 +35,7 @@ public class ItemController {
     }
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public ItemDto updateItem(@RequestHeader String email, @RequestHeader String password, @PathVariable Integer id, @Valid @RequestBody UpdateItemDto updateItemDto) {
         adminService.authenticate(email, password);
 
@@ -40,16 +43,19 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public ItemDto getItem(@PathVariable Integer id) {
         return itemService.getById(id);
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<ItemDto> getAllItems() {
         return itemService.getAllItems();
     }
 
     @GetMapping("/stock")
+    @ResponseStatus(HttpStatus.OK)
     public List<ItemStockIndicatorDto> getAllItemStockIndicators(@RequestHeader String email, @RequestHeader String password, @RequestParam(required = false) StockIndicator stockIndicator) {
         adminService.authenticate(email, password);
 

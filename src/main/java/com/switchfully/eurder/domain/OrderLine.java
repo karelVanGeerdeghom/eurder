@@ -36,4 +36,8 @@ public class OrderLine {
     public LocalDate getShippingDate() {
         return shippingDate;
     }
+
+    public Price calculateTotalPrice() {
+        return new Price(itemPrice.getAmount() * amountInOrder, Currency.EUR);
+    }
 }

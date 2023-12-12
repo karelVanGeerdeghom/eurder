@@ -6,12 +6,23 @@ import com.switchfully.eurder.domain.Price;
 import com.switchfully.eurder.dto.CreateItemDto;
 import com.switchfully.eurder.dto.ItemDto;
 import com.switchfully.eurder.dto.UpdateItemDto;
+import com.switchfully.eurder.service.OrderService;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ItemMapperTest {
     private final ItemMapper itemMapper = new ItemMapper();
+
+    @Test
+    void verifyShippingDaysInStock() {
+        assertThat(ItemMapper.STOCK_LOW_LESS_THAN).isEqualTo(5);
+    }
+
+    @Test
+    void verifyShippingDaysNotInStock() {
+        assertThat(ItemMapper.STOCK_MEDIUM_LESS_THAN).isEqualTo(10);
+    }
 
     @Test
     void givenItem_whenMapItemToItemDto_thenGetItemDto() {

@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Component
 public class OrderLineMapper {
     public OrderLineDto orderLineToOrderLineDto(OrderLine orderLine) {
-        return new OrderLineDto(orderLine.getItemId(), orderLine.getItemName(), orderLine.getItemPrice(), orderLine.getAmountInOrder(), orderLine.getShippingDate());
+        return new OrderLineDto(orderLine.getItemId(), orderLine.getItemName(), orderLine.getItemPrice(), orderLine.getAmountInOrder(), orderLine.getShippingDate(), orderLine.calculateTotalPrice());
     }
 
     public CreateOrderLineDto orderLineToCreateOrderLineDto(OrderLine orderLine) {
